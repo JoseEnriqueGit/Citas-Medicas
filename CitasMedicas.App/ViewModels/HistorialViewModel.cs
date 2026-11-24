@@ -38,6 +38,11 @@ public sealed class HistorialViewModel : ObservableObject
                 OnPropertyChanged(nameof(HayPaciente));
             }
         };
+        _estado.PacienteActivoCambio += () =>
+        {
+            _filtro = null;
+            Cargar();
+        };
         AccionVaciaCommand = new Command(AccionVacia);
         RegistrarseCommand = new Command(() => _ = ErroresUi.EjecutarAsync(() => Shell.Current.GoToAsync("//paciente")));
     }

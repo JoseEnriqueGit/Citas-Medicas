@@ -146,7 +146,7 @@
                     <Button
                         Style="{StaticResource TextButton}"
                         Text="Cancelar"
-                        IsVisible="{Binding Editando}"
+                        IsVisible="{Binding MostrarCancelar}"
                         Command="{Binding CancelarEdicionCommand}" />
                 </VerticalStackLayout>
 
@@ -205,6 +205,51 @@
                         Style="{StaticResource SecondaryButton}"
                         Text="Editar mis datos"
                         Command="{Binding EditarCommand}" />
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="Registrar otro paciente"
+                        Command="{Binding OtroCommand}" />
+
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding MostrarLista}">
+                        <Label Style="{StaticResource SectionLabel}" Text="Pacientes en este teléfono" />
+                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Pacientes}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:PacienteItem">
+                                    <Border
+                                        Style="{StaticResource CardBorder}"
+                                        MinimumHeightRequest="56"
+                                        SemanticProperties.Description="{Binding Descripcion}">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding CambiarCommand}" />
+                                        </Border.GestureRecognizers>
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                            <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                                                <Label Style="{StaticResource BoldLabel}" FontSize="14" Text="{Binding Nombre}" />
+                                                <Label Style="{StaticResource HintLabel}" Text="{Binding Cedula}" />
+                                            </VerticalStackLayout>
+                                            <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto" ColumnSpacing="6" VerticalOptions="Center" IsVisible="{Binding Activo}">
+                                                <Image
+                                                    Source="ic_check_success"
+                                                    WidthRequest="20"
+                                                    HeightRequest="20"
+                                                    VerticalOptions="Center"
+                                                    AutomationProperties.IsInAccessibleTree="False" />
+                                                <Label Grid.Column="1" Style="{StaticResource BoldLabel}" FontSize="14" VerticalOptions="Center" Text="Activo" />
+                                            </Grid>
+                                            <Image
+                                                Grid.Column="1"
+                                                Source="ic_chevron_muted"
+                                                WidthRequest="20"
+                                                HeightRequest="20"
+                                                VerticalOptions="Center"
+                                                IsVisible="{Binding Inactivo}"
+                                                AutomationProperties.IsInAccessibleTree="False" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

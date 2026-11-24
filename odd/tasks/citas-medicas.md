@@ -30,7 +30,7 @@ Estado: implementación completa (T1 a T9), verificada en emulador. Diseño en `
 | T8 | S5 | inline | Pantalla Historial (3 estados, diálogo de cancelación) | 43af740 |
 | T9 | S1-S7 | inline | Verificación en emulador: flujo completo por `adb`, capturas, README final | 502c80c |
 | T10 | S8 S9 S10 | inline, TDD | Core: `PacienteService.Listar/Activar`, `MedicoService.Registrar`, repositorio (`ListarPacientes`, `ActivarPaciente`, `InsertarMedico`, índice único de médico) | e1faddc |
-| T11 | S8 S10 | worker | App: registrar otro paciente y cambiar de paciente activo (pestaña Paciente) | |
+| T11 | S8 S10 | worker | App: registrar otro paciente y cambiar de paciente activo (pestaña Paciente) | 5872648 |
 | T12 | S9 S10 | worker | App: pantalla Registrar médico desde la pestaña Médicos | |
 | T13 | S8 S9 S10 | inline | Verificación en emulador, README y actualización de lo documentado | |
 

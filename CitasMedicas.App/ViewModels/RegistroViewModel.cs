@@ -18,6 +18,8 @@ public sealed class RegistroViewModel : ObservableObject
     private string _correo = "";
     private DateTime? _fecha;
     private bool _editando;
+    private bool _otro;
+    private IReadOnlyList<PacienteItem> _lista = Array.Empty<PacienteItem>();
     private IReadOnlyDictionary<CampoPaciente, string> _errores = new Dictionary<CampoPaciente, string>();
 
     public RegistroViewModel(PacienteService pacientes, AppState estado)
@@ -25,9 +27,12 @@ public sealed class RegistroViewModel : ObservableObject
         _pacientes = pacientes;
         _estado = estado;
         _estado.PropertyChanged += (_, _) => NotificarEstado();
+        _estado.DatosCambiaron += Refrescar;
+        _lista = ConstruirLista();
         RegistrarCommand = new Command(() => ErroresUi.Ejecutar(Registrar));
         EditarCommand = new Command(Editar);
         CancelarEdicionCommand = new Command(CancelarEdicion);
+        OtroCommand = new Command(() => ErroresUi.Ejecutar(EntrarOtro));
         SolicitarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(() => Shell.Current.GoToAsync("//solicitar")));
     }
 
@@ -40,6 +45,20 @@ public sealed class RegistroViewModel : ObservableObject
     public ICommand CancelarEdicionCommand { get; }
 
     public ICommand SolicitarCommand { get; }
+
+    public ICommand OtroCommand { get; }
+
+    public IReadOnlyList<PacienteItem> Pacientes
+    {
+        get => _lista;
+        private set => SetProperty(ref _lista, value);
+    }
+
+    public bool MostrarLista => Completado && _lista.Count >= 2;
+
+    public bool Otro => _otro;
+
+    public bool MostrarCancelar => _editando || _otro;
 
     public AppState Estado => _estado;
 
@@ -98,19 +117,19 @@ public sealed class RegistroViewModel : ObservableObject
 
     public bool HayErrores => _errores.Count > 0;
 
-    public bool MostrarInfo => MostrarFormulario && !HayErrores && !_editando;
+    public bool MostrarInfo => MostrarFormulario && !HayErrores && !_editando && !_otro;
 
     public string ResumenErrores => _errores.Count == 1 ? "Revisa 1 campo" : $"Revisa {_errores.Count} campos";
 
-    public bool Completado => _estado.Paciente is not null && !_editando;
+    public bool Completado => _estado.Paciente is not null && !_editando && !_otro;
 
     public bool MostrarFormulario => !Completado;
 
     public bool Editando => _editando;
 
-    public string Titulo => Completado ? "Mi registro" : _editando ? "Editar mis datos" : "Registro de paciente";
+    public string Titulo => Completado ? "Mi registro" : _editando ? "Editar mis datos" : _otro ? "Registrar otro paciente" : "Registro de paciente";
 
-    public string TextoBoton => _editando ? "Guardar cambios" : "Registrarme";
+    public string TextoBoton => _editando ? "Guardar cambios" : _otro ? "Registrar paciente" : "Registrarme";
 
     public string DatoNombre => _estado.Paciente?.NombreCompleto ?? "";
 
@@ -145,9 +164,10 @@ public sealed class RegistroViewModel : ObservableObject
         }
 
         _editando = false;
+        _otro = false;
         _estado.Paciente = resultado.Paciente;
         LimpiarFormulario();
-        NotificarEstado();
+        Refrescar();
     }
 
     private void Editar()
@@ -168,9 +188,34 @@ public sealed class RegistroViewModel : ObservableObject
         NotificarEstado();
     }
 
+    private void EntrarOtro()
+    {
+        _editando = false;
+        _otro = true;
+        _errores = new Dictionary<CampoPaciente, string>();
+        LimpiarFormulario();
+        NotificarErrores();
+        NotificarEstado();
+    }
+
+    private void Refrescar()
+    {
+        Pacientes = ConstruirLista();
+        NotificarEstado();
+    }
+
+    private IReadOnlyList<PacienteItem> ConstruirLista()
+    {
+        var activo = _estado.Paciente?.Id;
+        return _pacientes.Listar().Select(p => new PacienteItem(p, p.Id == activo, Cambiar)).ToList();
+    }
+
+    private void Cambiar(PacienteItem item) => ErroresUi.Ejecutar(() => _pacientes.Activar(item.Paciente.Id));
+
     private void CancelarEdicion()
     {
         _editando = false;
+        _otro = false;
         _errores = new Dictionary<CampoPaciente, string>();
         LimpiarFormulario();
         NotificarErrores();
@@ -206,6 +251,9 @@ public sealed class RegistroViewModel : ObservableObject
         OnPropertyChanged(nameof(Completado));
         OnPropertyChanged(nameof(MostrarFormulario));
         OnPropertyChanged(nameof(Editando));
+        OnPropertyChanged(nameof(Otro));
+        OnPropertyChanged(nameof(MostrarCancelar));
+        OnPropertyChanged(nameof(MostrarLista));
         OnPropertyChanged(nameof(Titulo));
         OnPropertyChanged(nameof(TextoBoton));
         OnPropertyChanged(nameof(MostrarInfo));

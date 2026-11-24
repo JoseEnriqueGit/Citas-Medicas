@@ -10,9 +10,10 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
-        if (Window is { } ventana)
+        if (Window is { DecorView: { } vista } ventana &&
+            AndroidX.Core.View.WindowCompat.GetInsetsController(ventana, vista) is { } controlador)
         {
-            AndroidX.Core.View.WindowCompat.GetInsetsController(ventana, ventana.DecorView).AppearanceLightStatusBars = true;
+            controlador.AppearanceLightStatusBars = true;
         }
     }
 }

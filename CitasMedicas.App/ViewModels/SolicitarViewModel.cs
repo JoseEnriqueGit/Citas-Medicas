@@ -30,6 +30,7 @@ public sealed class SolicitarViewModel : ObservableObject
         _horarios = horarios;
         _repositorio = repositorio;
         _estado = estado;
+        _estado.PacienteActivoCambio += Reiniciar;
         RevisarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(RevisarAsync));
         CambiarMedicoCommand = new Command(() =>
         {
