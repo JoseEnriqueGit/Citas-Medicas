@@ -4,19 +4,187 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:CitasMedicas.App.Controls"
-    Title="Médicos"
-    BackgroundColor="{StaticResource Background}"
-    Shell.NavBarIsVisible="False">
-    <Grid RowDefinitions="Auto,*">
+    xmlns:vm="clr-namespace:CitasMedicas.App.ViewModels"
+    x:DataType="vm:MedicosViewModel"
+    Title="Médicos">
+    <Grid RowDefinitions="Auto,Auto,*">
         <controls:AppBar
             Title="Médicos"
-            PatientName="{Binding NombrePaciente}"
-            SemanticProperties.Description="Barra superior de Médicos" />
-        <Label
-            Grid.Row="1"
-            Text="Médicos"
-            Style="{StaticResource TitleLabel}"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+            PatientName="{Binding Estado.NombrePaciente}" />
+
+        <VerticalStackLayout Grid.Row="1" Padding="16,16,16,8" Spacing="12">
+            <Border Style="{StaticResource BannerWarning}" IsVisible="{Binding SinPaciente}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Image
+                        Source="ic_alert_warning"
+                        WidthRequest="20"
+                        HeightRequest="20"
+                        VerticalOptions="Start"
+                        AutomationProperties.IsInAccessibleTree="False" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="8">
+                        <Label Style="{StaticResource BannerWarningText}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Aún no estás registrado." FontAttributes="Bold" />
+                                    <Span Text=" Puedes ver los médicos, pero necesitas registrarte para pedir una cita." />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="Registrarme"
+                            HorizontalOptions="Start"
+                            Command="{Binding RegistrarseCommand}"
+                            SemanticProperties.Description="Registrarme" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <VerticalStackLayout Spacing="4">
+                <Label Style="{StaticResource FieldLabel}" Text="Buscar médico" />
+                <Border Style="{StaticResource FieldBorder}">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Entry
+                            Text="{Binding Busqueda, Mode=TwoWay}"
+                            Placeholder="Nombre o especialidad"
+                            VerticalOptions="Center"
+                            SemanticProperties.Description="Buscar médico por nombre o especialidad" />
+                        <Image
+                            Grid.Column="1"
+                            Source="ic_search_muted"
+                            WidthRequest="24"
+                            HeightRequest="24"
+                            VerticalOptions="Center"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <ScrollView
+                Orientation="Horizontal"
+                HorizontalScrollBarVisibility="Never"
+                SemanticProperties.Description="Filtrar por especialidad">
+                <HorizontalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Especialidades}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:EspecialidadItem">
+                            <controls:ChipView
+                                Text="{Binding Nombre}"
+                                IsSelected="{Binding Seleccionada}"
+                                Command="{Binding ElegirCommand}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <Label Style="{StaticResource HintLabel}" IsVisible="{Binding MostrarResumen}">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding ResumenCantidad}" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        <Span Text="{Binding ResumenDetalle}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </VerticalStackLayout>
+
+        <CollectionView
+            Grid.Row="2"
+            ItemsSource="{Binding Medicos}"
+            SelectionMode="None"
+            Margin="16,0"
+            SemanticProperties.Description="Médicos">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.Footer>
+                <BoxView HeightRequest="8" Color="Transparent" />
+            </CollectionView.Footer>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:MedicoItem">
+                    <Border Style="{StaticResource CardBorder}" SemanticProperties.Description="{Binding Descripcion}">
+                        <Grid ColumnDefinitions="48,*,24" ColumnSpacing="12">
+                            <Border
+                                WidthRequest="48"
+                                HeightRequest="48"
+                                BackgroundColor="{StaticResource PrimaryTint}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 24"
+                                VerticalOptions="Center">
+                                <Label
+                                    Text="{Binding Iniciales}"
+                                    FontAttributes="Bold"
+                                    TextColor="{StaticResource PrimaryDark}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label Text="{Binding Nombre}" FontAttributes="Bold" />
+                                <Label Style="{StaticResource HintLabel}" Text="{Binding Especialidad}" />
+                                <Label Style="{StaticResource HintLabel}" Text="{Binding Centro}" />
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4" Margin="0,2,0,0">
+                                    <Image
+                                        Source="ic_clock_primary"
+                                        WidthRequest="16"
+                                        HeightRequest="16"
+                                        VerticalOptions="Start"
+                                        Margin="0,2,0,0"
+                                        AutomationProperties.IsInAccessibleTree="False" />
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        TextColor="{StaticResource PrimaryDark}"
+                                        Text="{Binding Proximo}" />
+                                </Grid>
+                            </VerticalStackLayout>
+                            <Image
+                                Grid.Column="2"
+                                Source="ic_chevron_muted"
+                                WidthRequest="24"
+                                HeightRequest="24"
+                                VerticalOptions="Center"
+                                AutomationProperties.IsInAccessibleTree="False" />
+                        </Grid>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ElegirCommand}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Spacing="12" Padding="16,32" HorizontalOptions="Center">
+                    <Border
+                        WidthRequest="72"
+                        HeightRequest="72"
+                        HorizontalOptions="Center"
+                        BackgroundColor="{StaticResource Disabled}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 36">
+                        <Image
+                            Source="ic_search_muted"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                    </Border>
+                    <Label
+                        Style="{StaticResource DialogTitleLabel}"
+                        HorizontalTextAlignment="Center"
+                        Text="Sin resultados" />
+                    <Label
+                        Style="{StaticResource HintLabel}"
+                        HorizontalTextAlignment="Center"
+                        MaximumWidthRequest="280"
+                        Text="{Binding SinResultadosTexto}" />
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="Limpiar búsqueda"
+                        HorizontalOptions="Center"
+                        Padding="24,12"
+                        Command="{Binding LimpiarCommand}"
+                        SemanticProperties.Description="Limpiar búsqueda" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
     </Grid>
 </ContentPage>

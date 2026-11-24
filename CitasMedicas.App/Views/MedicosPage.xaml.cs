@@ -1,12 +1,20 @@
-using CitasMedicas.App.Services;
+using CitasMedicas.App.ViewModels;
 
 namespace CitasMedicas.App.Views;
 
 public partial class MedicosPage : ContentPage
 {
-    public MedicosPage(AppState estado)
+    private readonly MedicosViewModel _vm;
+
+    public MedicosPage(MedicosViewModel vm)
     {
         InitializeComponent();
-        BindingContext = estado;
+        BindingContext = _vm = vm;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _vm.Cargar();
     }
 }

@@ -21,7 +21,7 @@ Estado: andamiaje y diseño de UI listos; falta toda la implementación. Diseño
 | T2 | S3 | inline, TDD | Core: `HorarioService` (bloques, días hábiles, ocupados, próximo libre) | 087ceb6 |
 | T3 | S4 S6 | inline, TDD | Core: `CitaService` (solicitar, doble reserva, pasado, cancelar, historial) y `PacienteService` (validación, cédula única) | 01c5ff5 |
 | T4 | S7 | inline | App: `Colors.xaml` y `Styles.xaml` desde `design/system.md`, Shell con 5 pestañas, inyección de dependencias, quitar la plantilla | 162a1fe |
-| T5 | S1 | inline | Pantalla Registro (3 estados) | |
+| T5 | S1 | inline | Pantalla Registro (3 estados) | 443daec |
 | T6 | S2 S3 | inline | Pantallas Médicos y Horarios (6 estados) | |
 | T7 | S4 | inline | Pantalla Solicitar cita (4 estados, diálogo de confirmación) | |
 | T8 | S5 | inline | Pantalla Historial (3 estados, diálogo de cancelación) | |

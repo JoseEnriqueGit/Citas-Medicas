@@ -31,6 +31,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<AppState>();
 
 		builder.Services.AddSingleton<RegistroViewModel>();
+		builder.Services.AddSingleton<MedicosViewModel>();
+		builder.Services.AddSingleton<HorariosViewModel>();
 		builder.Services.AddTransient<RegistroPage>();
 		builder.Services.AddTransient<MedicosPage>();
 		builder.Services.AddTransient<HorariosPage>();

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chosen": "03-horarios.html",
+  "chosen": "05-historial.html",
   "handoffs": {
     "01-registro.html": {
       "status": "implemented",
@@ -12,17 +12,35 @@
       "note": "Registro implementado en MAUI: formulario con 5 campos, errores simultáneos, estado completado y edición; verificado en emulador (capturas en evidence/)."
     },
     "02-medicos.html": {
-      "status": "sent",
+      "status": "implemented",
       "queued": false,
       "sentAt": "2026-11-24T20:16:12.135Z",
+      "startedAt": null,
+      "implementedAt": "2026-11-24T20:24:15.176Z",
+      "feature": "odd/tasks/citas-medicas.md",
+      "note": "Médicos implementado: búsqueda + chips combinables, próximo horario libre, estado sin resultados; verificado en emulador (evidence/t6-*)."
+    },
+    "03-horarios.html": {
+      "status": "implemented",
+      "queued": false,
+      "sentAt": "2026-11-24T20:16:12.148Z",
+      "startedAt": null,
+      "implementedAt": "2026-11-24T20:24:15.182Z",
+      "feature": "odd/tasks/citas-medicas.md",
+      "note": "Horarios implementado: tira de fechas, rejilla de 16 bloques, día lleno con salto al próximo día, barra Solicitar cita; verificado en emulador (evidence/t6-*)."
+    },
+    "04-solicitar-cita.html": {
+      "status": "sent",
+      "queued": false,
+      "sentAt": "2026-11-24T20:24:15.198Z",
       "startedAt": null,
       "implementedAt": null,
       "feature": "odd/tasks/citas-medicas.md"
     },
-    "03-horarios.html": {
+    "05-historial.html": {
       "status": "sent",
       "queued": false,
-      "sentAt": "2026-11-24T20:16:12.148Z",
+      "sentAt": "2026-11-24T20:24:15.208Z",
       "startedAt": null,
       "implementedAt": null,
       "feature": "odd/tasks/citas-medicas.md"
