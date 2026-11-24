@@ -12,6 +12,9 @@ Estado: implementación completa (T1 a T9), verificada en emulador. Diseño en `
 - S5. "Historial de citas." Citas del paciente activo, la más reciente primero, con filtro Todas, Programadas, Completadas y Canceladas. Solo las Programadas se pueden cancelar, con confirmación; al cancelar el horario queda libre. Vacío: "Aún no tienes citas" con acción "Solicitar cita". Diseño: `05-historial.html`.
 - S6. Estados de cita: Programada, Completada, Cancelada. Una cita no se reserva en el pasado ni se duplica en el mismo médico, fecha y hora mientras esté Programada.
 - S7. Reglas de código del curso: proyecto independiente, sin comentarios en el código, copy de la UI en español neutro, solo Android.
+- S8. "Registro de más pacientes." Origen (usuario): "La aplicacion no tien forma de registrar mas pacientes, verdad?". Se puede registrar otro paciente desde la pestaña Paciente; el nuevo queda como paciente activo con las mismas validaciones de S1 (cédula única). Se puede cambiar el paciente activo entre los registrados. Cada paciente ve solo su historial y solo el paciente activo solicita citas (S4, S5).
+- S9. "Registro de médicos." Origen (usuario): "Ni medicos". Se puede registrar un médico con nombre, especialidad y centro (los tres obligatorios, máximo 100 caracteres cada uno), sin duplicados (mismo nombre, especialidad y centro, sin distinguir mayúsculas). Todos los errores se muestran a la vez. El médico nuevo aparece en el listado y sus filtros (S2), en los horarios (S3) y se puede elegir al solicitar cita (S4).
+- S10. "Tiempo real al registrar." Origen (usuario): "Tambien que funcione en tiempo real a la hora de registrar nuevos datos". Al registrar un paciente, cambiar de paciente o registrar un médico, todas las pantallas muestran el cambio al instante, sin reiniciar la aplicación ni cambiar de pestaña: listado y filtros de médicos, elección de médico al solicitar, nombre del paciente activo en la barra, historial y borrador de solicitud.
 
 ## Tasks
 
@@ -26,6 +29,10 @@ Estado: implementación completa (T1 a T9), verificada en emulador. Diseño en `
 | T7 | S4 | inline | Pantalla Solicitar cita (4 estados, diálogo de confirmación) | 9311152 |
 | T8 | S5 | inline | Pantalla Historial (3 estados, diálogo de cancelación) | 43af740 |
 | T9 | S1-S7 | inline | Verificación en emulador: flujo completo por `adb`, capturas, README final | 502c80c |
+| T10 | S8 S9 S10 | inline, TDD | Core: `PacienteService.Listar/Activar`, `MedicoService.Registrar`, repositorio (`ListarPacientes`, `ActivarPaciente`, `InsertarMedico`, índice único de médico) | e1faddc |
+| T11 | S8 S10 | worker | App: registrar otro paciente y cambiar de paciente activo (pestaña Paciente) | |
+| T12 | S9 S10 | worker | App: pantalla Registrar médico desde la pestaña Médicos | |
+| T13 | S8 S9 S10 | inline | Verificación en emulador, README y actualización de lo documentado | |
 
 Orden: T1 a T3 (Core con pruebas en rojo primero), T4, T5 a T8 una por una contra su artboard (`gentle_design` acción `implement`), T9. Un commit por tarea o por par de tareas pequeñas, Conventional Commits.
 
@@ -47,3 +54,5 @@ Orden: T1 a T3 (Core con pruebas en rojo primero), T4, T5 a T8 una por una contr
 - L13 (entrega académica): `docs/entrega` con Conclusiones, Bibliografía y Anexos (Word y PDF) y guion de exposición; `docs/capturas` con 18 capturas; README reescrito para mostrar el repositorio. Las referencias se verificaron (URLs con respuesta 200) y los anexos A y B documentan honestamente lo no implementado (RF-02, RNF-02, RNF-03, reprogramación).
 
 - L14 (capturas de uso real): `docs/capturas-usuario` con 18 capturas a 1080x2400 de una paciente ficticia (registro, médicos, horarios, solicitud, historial y cancelación), con barra de estado limpia. Para que se leyera la barra de estado se corrigió `MainActivity` (íconos oscuros sobre fondo claro, `AppearanceLightStatusBars`).
+- L15 (usuario, tras L14): "La aplicacion no tien forma de registrar mas pacientes, verdad?" Respuesta: correcta, solo hay uno por teléfono. Luego: "Ni medicos". Luego: "Procede a trabaja para implemetar eso ahora." Se agregan S8, S9 y T10 a T13.
+- L16 (usuario, durante T10): "Tambien que funcione en tiempo real a la hora de registrar nuevos datos". Se agrega S10 y los servicios del Core avisan los cambios (`MedicoService.MedicoRegistrado`, `PacienteService.PacientesCambiaron`) para que las pantallas se actualicen al instante.

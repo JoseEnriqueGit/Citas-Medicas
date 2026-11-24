@@ -21,6 +21,8 @@ public sealed class CitasRepository : IDisposable
         _db.CreateTable<Cita>();
         _db.Execute(
             "CREATE UNIQUE INDEX IF NOT EXISTS UX_Cita_Programada ON Cita (MedicoId, Inicio) WHERE Estado = 0");
+        _db.Execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS UX_Medico_Datos ON Medico (Nombre COLLATE NOCASE, Especialidad COLLATE NOCASE, Centro COLLATE NOCASE)");
         SembrarMedicos();
     }
 
@@ -46,6 +48,54 @@ public sealed class CitasRepository : IDisposable
         lock (_gate)
         {
             return _db.Table<Medico>().OrderBy(m => m.Id).ToList();
+        }
+    }
+
+    public Medico InsertarMedico(Medico medico)
+    {
+        lock (_gate)
+        {
+            try
+            {
+                _db.Insert(medico);
+                return medico;
+            }
+            catch (SQLiteException ex) when (ex.Result == SQLite3.Result.Constraint)
+            {
+                throw new MedicoDuplicadoException();
+            }
+        }
+    }
+
+    public IReadOnlyList<Paciente> ListarPacientes()
+    {
+        lock (_gate)
+        {
+            return _db.Table<Paciente>().OrderBy(p => p.Id).ToList();
+        }
+    }
+
+    public void ActivarPaciente(int id)
+    {
+        lock (_gate)
+        {
+            _db.BeginTransaction();
+            try
+            {
+                if (_db.Find<Paciente>(id) is null)
+                {
+                    throw new KeyNotFoundException($"No existe el paciente {id}.");
+                }
+
+                _db.Execute("UPDATE Paciente SET Activo = 0");
+                _db.Execute("UPDATE Paciente SET Activo = 1 WHERE Id = ?", id);
+                _db.Commit();
+            }
+            catch
+            {
+                _db.Rollback();
+                throw;
+            }
         }
     }
 

@@ -27,6 +27,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton(TimeProvider.System);
 		builder.Services.AddSingleton<HorarioService>();
 		builder.Services.AddSingleton<PacienteService>();
+		builder.Services.AddSingleton<MedicoService>();
 		builder.Services.AddSingleton<CitaService>();
 		builder.Services.AddSingleton<AppState>();
 

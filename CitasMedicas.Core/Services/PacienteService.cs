@@ -45,7 +45,18 @@ public sealed partial class PacienteService
         _reloj = reloj;
     }
 
+    public event Action? PacientesCambiaron;
+
     public Paciente? ObtenerActivo() => _repositorio.ObtenerPacienteActivo();
+
+    public IReadOnlyList<Paciente> Listar() => _repositorio.ListarPacientes();
+
+    public Paciente Activar(int id)
+    {
+        _repositorio.ActivarPaciente(id);
+        Notificar();
+        return _repositorio.ObtenerPaciente(id)!;
+    }
 
     public ResultadoRegistro Registrar(RegistroPaciente registro)
     {
@@ -57,7 +68,9 @@ public sealed partial class PacienteService
 
         try
         {
-            return new ResultadoRegistro { Paciente = _repositorio.InsertarPaciente(datos!) };
+            var paciente = _repositorio.InsertarPaciente(datos!);
+            Notificar();
+            return new ResultadoRegistro { Paciente = paciente };
         }
         catch (CedulaDuplicadaException ex)
         {
@@ -81,11 +94,26 @@ public sealed partial class PacienteService
         try
         {
             _repositorio.ActualizarPaciente(datos);
+            Notificar();
             return new ResultadoRegistro { Paciente = datos };
         }
         catch (CedulaDuplicadaException ex)
         {
             return new ResultadoRegistro { Errores = new Dictionary<CampoPaciente, string> { [CampoPaciente.Cedula] = ex.Message } };
+        }
+    }
+
+    private void Notificar()
+    {
+        foreach (var suscriptor in PacientesCambiaron?.GetInvocationList().Cast<Action>() ?? [])
+        {
+            try
+            {
+                suscriptor();
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 
