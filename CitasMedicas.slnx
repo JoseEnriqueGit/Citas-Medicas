@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CitasMedicas.App/CitasMedicas.App.csproj" />
+  <Project Path="CitasMedicas.Core.Tests/CitasMedicas.Core.Tests.csproj" />
+  <Project Path="CitasMedicas.Core/CitasMedicas.Core.csproj" />
+</Solution>
