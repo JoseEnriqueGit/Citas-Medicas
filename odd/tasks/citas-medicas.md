@@ -45,3 +45,5 @@ Orden: T1 a T3 (Core con pruebas en rojo primero), T4, T5 a T8 una por una contr
 - L12 (sin cubrir): modal abierto y navegación de Shell por otra vía no se probó; fechas obsoletas tras medianoche, borrador en memoria y cálculo del próximo horario en el hilo de UI siguen pendientes; decisión abierta sobre «Completada».
 
 - L13 (entrega académica): `docs/entrega` con Conclusiones, Bibliografía y Anexos (Word y PDF) y guion de exposición; `docs/capturas` con 18 capturas; README reescrito para mostrar el repositorio. Las referencias se verificaron (URLs con respuesta 200) y los anexos A y B documentan honestamente lo no implementado (RF-02, RNF-02, RNF-03, reprogramación).
+
+- L14 (capturas de uso real): `docs/capturas-usuario` con 18 capturas a 1080x2400 de una paciente ficticia (registro, médicos, horarios, solicitud, historial y cancelación), con barra de estado limpia. Para que se leyera la barra de estado se corrigió `MainActivity` (íconos oscuros sobre fondo claro, `AppearanceLightStatusBars`).

@@ -8,7 +8,7 @@ Proyecto final de Programación IV: *Sistema de Gestión de Citas Médicas*.
 | --- | --- | --- | --- | --- |
 | <img src="docs/capturas/03-registro-completado.png" width="170" alt="Registro completado"> | <img src="docs/capturas/04-medicos-lista.png" width="170" alt="Lista de médicos"> | <img src="docs/capturas/07-horarios-bloque-elegido.png" width="170" alt="Horarios con bloque elegido"> | <img src="docs/capturas/12-solicitar-confirmacion.png" width="170" alt="Confirmación de la cita"> | <img src="docs/capturas/15-historial.png" width="170" alt="Historial de citas"> |
 
-Hay 18 capturas de todas las pantallas y estados en [`docs/capturas`](docs/capturas).
+Hay 18 capturas de todas las pantallas y estados en [`docs/capturas`](docs/capturas) y 18 de un recorrido completo de uso real, a pantalla completa, en [`docs/capturas-usuario`](docs/capturas-usuario/INDICE.md).
 
 ## Funcionalidades
 
