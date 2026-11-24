@@ -25,7 +25,7 @@ Estado: implementación completa (T1 a T9), verificada en emulador. Diseño en `
 | T6 | S2 S3 | inline | Pantallas Médicos y Horarios (6 estados) | 12f3b9d |
 | T7 | S4 | inline | Pantalla Solicitar cita (4 estados, diálogo de confirmación) | 9311152 |
 | T8 | S5 | inline | Pantalla Historial (3 estados, diálogo de cancelación) | 43af740 |
-| T9 | S1-S7 | inline | Verificación en emulador: flujo completo por `adb`, capturas, README final | 6d4eb03 |
+| T9 | S1-S7 | inline | Verificación en emulador: flujo completo por `adb`, capturas, README final | 502c80c |
 
 Orden: T1 a T3 (Core con pruebas en rojo primero), T4, T5 a T8 una por una contra su artboard (`gentle_design` acción `implement`), T9. Un commit por tarea o por par de tareas pequeñas, Conventional Commits.
 
