@@ -1,7 +1,7 @@
 # Sistema de Gestión de Citas Médicas
 
 App móvil Android (.NET MAUI, SQLite local) para administrar citas entre pacientes y centros médicos.
-Estado: andamiaje y diseño de UI listos; falta toda la implementación. Diseño en `design/citas-medicas/` (5 artboards) y `design/system.md`.
+Estado: implementación completa (T1 a T9), verificada en emulador. Diseño en `design/citas-medicas/` (5 artboards) y `design/system.md`.
 
 ## Specs
 
@@ -24,8 +24,8 @@ Estado: andamiaje y diseño de UI listos; falta toda la implementación. Diseño
 | T5 | S1 | inline | Pantalla Registro (3 estados) | 443daec |
 | T6 | S2 S3 | inline | Pantallas Médicos y Horarios (6 estados) | 12f3b9d |
 | T7 | S4 | inline | Pantalla Solicitar cita (4 estados, diálogo de confirmación) | 9311152 |
-| T8 | S5 | inline | Pantalla Historial (3 estados, diálogo de cancelación) | |
-| T9 | S1-S7 | inline | Verificación en emulador: flujo completo por `adb`, capturas, README final | |
+| T8 | S5 | inline | Pantalla Historial (3 estados, diálogo de cancelación) | 43af740 |
+| T9 | S1-S7 | inline | Verificación en emulador: flujo completo por `adb`, capturas, README final | 6d4eb03 |
 
 Orden: T1 a T3 (Core con pruebas en rojo primero), T4, T5 a T8 una por una contra su artboard (`gentle_design` acción `implement`), T9. Un commit por tarea o por par de tareas pequeñas, Conventional Commits.
 
@@ -36,3 +36,6 @@ Orden: T1 a T3 (Core con pruebas en rojo primero), T4, T5 a T8 una por una contr
 - L3 (decisión por defecto): se propuso SQLite local y sin PDF; el usuario respondió "Ok" sin elegir otra cosa. Si la consigna exige consumir un API REST o entrega en PDF, se agrega después (ver `Xamarin-Unidad2-Actividad1` como referencia para ambos).
 - L4 (diseño): `design/citas-medicas/` con 5 artboards y `design/system.md` (sistema propuesto, el proyecto no tenía fuentes de diseño). Navegación: 5 pestañas inferiores (Paciente, Médicos, Horarios, Solicitar, Historial).
 - L5 (entorno): `dotnet build CitasMedicas.slnx` con JDK 21 compila sin errores. Se fijó `SQLitePCLRaw.lib.e_sqlite3` y `.android` en 2.1.14 para evitar la advertencia NU1903 (vulnerabilidad alta de 2.1.11).
+- L6 (implementación): T1 a T3 con pruebas primero (72 pruebas xunit en verde); T4 a T8 con un worker por pantalla contra su artboard (`gentle_design` implement y handoff). La regla de no duplicar se impone también en SQLite con un índice único parcial (`WHERE Estado = 0`).
+- L7 (hallazgos de entorno): en Android la librería nativa `libe_sqlite3.so` de `SQLitePCLRaw.lib.e_sqlite3` (linux, necesita glibc) tapaba a la de Android y tumbaba el arranque; se excluyen sus assets nativos en `CitasMedicas.App.csproj` y se llama `SQLitePCL.Batteries_V2.Init()` en el Core. `adb shell pm clear` rompe el Fast Deployment de depuración: usar `adb uninstall` y volver a ejecutar. El permiso INTERNET debe quedar en el manifiesto (sin él la app de depuración aborta).
+- L8 (verificación T9): estado «Horario tomado» reproducido en el emulador insertando por fuera una cita en la base (`run-as` + copia de `citas.db3`): bloque tachado, aviso, motivo conservado y nada guardado. Estados vacíos y «sin paciente» capturados en `evidence/t9-*`. Solo Android: se quitaron las carpetas de plataforma iOS, MacCatalyst y Windows.
