@@ -10,21 +10,12 @@ public partial class HorariosPage : ContentPage
     {
         InitializeComponent();
         BindingContext = _vm = vm;
-        _vm.FechaVisible += OnFechaVisible;
+        _vm.FechaVisible += TiraFechas.MostrarIndice;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
         _vm.Recargar();
-    }
-
-    private async void OnFechaVisible(int indice)
-    {
-        await Task.Yield();
-        if (indice >= 0 && indice < FechasLayout.Children.Count && FechasLayout.Children[indice] is VisualElement destino)
-        {
-            await FechasScroll.ScrollToAsync(destino, ScrollToPosition.Center, false);
-        }
     }
 }

@@ -12,6 +12,14 @@ public partial class ChipView : ContentView
         BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(ChipView), false,
             propertyChanged: (b, _, _) => ((ChipView)b).Actualizar());
 
+    public static readonly BindableProperty IsDisabledProperty =
+        BindableProperty.Create(nameof(IsDisabled), typeof(bool), typeof(ChipView), false,
+            propertyChanged: (b, _, _) => ((ChipView)b).Actualizar());
+
+    public static readonly BindableProperty DisabledLabelProperty =
+        BindableProperty.Create(nameof(DisabledLabel), typeof(string), typeof(ChipView), "no disponible",
+            propertyChanged: (b, _, _) => ((ChipView)b).Actualizar());
+
     public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ChipView));
 
@@ -36,6 +44,18 @@ public partial class ChipView : ContentView
         set => SetValue(IsSelectedProperty, value);
     }
 
+    public bool IsDisabled
+    {
+        get => (bool)GetValue(IsDisabledProperty);
+        set => SetValue(IsDisabledProperty, value);
+    }
+
+    public string DisabledLabel
+    {
+        get => (string)GetValue(DisabledLabelProperty);
+        set => SetValue(DisabledLabelProperty, value);
+    }
+
     public ICommand? Command
     {
         get => (ICommand?)GetValue(CommandProperty);
@@ -51,20 +71,22 @@ public partial class ChipView : ContentView
     private void Actualizar()
     {
         var resources = Application.Current!.Resources;
-        var seleccionado = IsSelected;
-        ChipFrame.BackgroundColor = (Color)resources[seleccionado ? "PrimaryTint" : "Surface"];
-        ChipFrame.Stroke = (Color)resources[seleccionado ? "Primary" : "Border"];
+        var deshabilitado = IsDisabled;
+        var seleccionado = IsSelected && !deshabilitado;
+        ChipFrame.BackgroundColor = (Color)resources[deshabilitado ? "Disabled" : seleccionado ? "PrimaryTint" : "Surface"];
+        ChipFrame.Stroke = (Color)resources[deshabilitado ? "Disabled" : seleccionado ? "Primary" : "Border"];
         ChipFrame.StrokeThickness = seleccionado ? 2 : 1;
         ChipFrame.Padding = new Thickness(seleccionado ? 14 : 15, 0);
         CheckIcon.IsVisible = seleccionado;
-        TextLabel.TextColor = (Color)resources[seleccionado ? "PrimaryDark" : "Ink"];
+        TextLabel.TextColor = (Color)resources[deshabilitado ? "Muted" : seleccionado ? "PrimaryDark" : "Ink"];
         TextLabel.FontAttributes = seleccionado ? FontAttributes.Bold : FontAttributes.None;
-        SemanticProperties.SetDescription(ChipFrame, seleccionado ? $"{Text}, seleccionado" : Text);
+        TextLabel.TextDecorations = deshabilitado ? TextDecorations.Strikethrough : TextDecorations.None;
+        SemanticProperties.SetDescription(ChipFrame, deshabilitado ? $"{Text}, {DisabledLabel}" : seleccionado ? $"{Text}, seleccionado" : Text);
     }
 
     private void OnTapped(object? sender, TappedEventArgs e)
     {
-        if (Command?.CanExecute(CommandParameter) == true)
+        if (!IsDisabled && Command?.CanExecute(CommandParameter) == true)
         {
             Command.Execute(CommandParameter);
         }

@@ -14,6 +14,23 @@ public sealed class FechaItem : ObservableObject
         ElegirCommand = new Command(() => alElegir(this));
     }
 
+    public static IReadOnlyList<FechaItem> Proximas(DateTime hoy, DateTime hasta, int minimo, Action<FechaItem> alElegir)
+    {
+        var fechas = new List<FechaItem>();
+        var dia = hoy;
+        while (fechas.Count < minimo || fechas[^1].Fecha < hasta)
+        {
+            if (!(dia.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday))
+            {
+                fechas.Add(new FechaItem(dia, dia == hoy, alElegir));
+            }
+
+            dia = dia.AddDays(1);
+        }
+
+        return fechas;
+    }
+
     public DateTime Fecha { get; }
 
     public bool EsHoy { get; }

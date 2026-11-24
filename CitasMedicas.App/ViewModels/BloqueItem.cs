@@ -37,6 +37,10 @@ public sealed class BloqueItem
 
     public bool Elegido { get; }
 
+    public bool Deshabilitado => Variante is "ocupado" or "pasado";
+
+    public string EstadoTexto => Estado.ToLowerInvariant();
+
     public string Descripcion { get; }
 
     public ICommand? ElegirCommand { get; }

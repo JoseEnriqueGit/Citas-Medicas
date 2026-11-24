@@ -30,12 +30,13 @@
       "note": "Horarios implementado: tira de fechas, rejilla de 16 bloques, día lleno con salto al próximo día, barra Solicitar cita; verificado en emulador (evidence/t6-*)."
     },
     "04-solicitar-cita.html": {
-      "status": "sent",
+      "status": "implemented",
       "queued": false,
       "sentAt": "2026-11-24T20:24:15.198Z",
       "startedAt": null,
-      "implementedAt": null,
-      "feature": "odd/tasks/citas-medicas.md"
+      "implementedAt": "2026-11-24T20:33:28.197Z",
+      "feature": "odd/tasks/citas-medicas.md",
+      "note": "Solicitar implementado: cuatro pasos, validación simultánea, diálogo modal de confirmación, estado programada; estado \"Horario tomado\" cubierto por código y prueba del Core (no reproducible desde la UI sola). Evidencias evidence/t7-*."
     },
     "05-historial.html": {
       "status": "sent",

@@ -4,19 +4,314 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:CitasMedicas.App.Controls"
-    Title="Solicitar cita"
-    BackgroundColor="{StaticResource Background}"
-    Shell.NavBarIsVisible="False">
-    <Grid RowDefinitions="Auto,*">
+    xmlns:vm="clr-namespace:CitasMedicas.App.ViewModels"
+    x:DataType="vm:SolicitarViewModel"
+    Title="Solicitar cita">
+    <Grid RowDefinitions="Auto,*,Auto">
         <controls:AppBar
-            Title="Solicitar cita"
-            PatientName="{Binding NombrePaciente}"
-            SemanticProperties.Description="Barra superior de Solicitar cita" />
-        <Label
+            Title="{Binding Titulo}"
+            PatientName="{Binding Estado.NombrePaciente}" />
+
+        <VerticalStackLayout
             Grid.Row="1"
-            Text="Solicitar cita"
-            Style="{StaticResource TitleLabel}"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+            Padding="16,48"
+            Spacing="12"
+            VerticalOptions="Start"
+            IsVisible="{Binding SinPaciente}">
+            <Border
+                WidthRequest="72"
+                HeightRequest="72"
+                HorizontalOptions="Center"
+                BackgroundColor="{StaticResource PrimaryTint}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 36">
+                <Image
+                    Source="ic_user_primary"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    AutomationProperties.IsInAccessibleTree="False" />
+            </Border>
+            <Label
+                Style="{StaticResource DialogTitleLabel}"
+                HorizontalTextAlignment="Center"
+                Text="Aún no estás registrado" />
+            <Label
+                Style="{StaticResource HintLabel}"
+                HorizontalTextAlignment="Center"
+                Text="Regístrate para solicitar una cita." />
+            <Button
+                Text="Ir a Registro"
+                HorizontalOptions="Center"
+                Padding="24,12"
+                Command="{Binding IrAPacienteCommand}"
+                SemanticProperties.Description="Ir a Registro" />
+        </VerticalStackLayout>
+
+        <ScrollView x:Name="Desplazamiento" Grid.Row="1" IsVisible="{Binding MostrarFormulario}">
+            <VerticalStackLayout Padding="16" Spacing="20">
+                <Border
+                    Style="{StaticResource BannerError}"
+                    IsVisible="{Binding HayErrores}"
+                    SemanticProperties.Description="{Binding TextoAviso}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Image
+                            Source="ic_alert_danger"
+                            WidthRequest="20"
+                            HeightRequest="20"
+                            VerticalOptions="Start"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                        <Label Grid.Column="1" Style="{StaticResource BannerErrorText}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding ResumenErrores}" FontAttributes="Bold" />
+                                    <Span Text=" antes de continuar." />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </Border>
+
+                <Border
+                    Style="{StaticResource BannerError}"
+                    IsVisible="{Binding Tomado}"
+                    SemanticProperties.Description="{Binding TextoAviso}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Image
+                            Source="ic_alert_danger"
+                            WidthRequest="20"
+                            HeightRequest="20"
+                            VerticalOptions="Start"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                        <Label Grid.Column="1" Style="{StaticResource BannerErrorText}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Ese horario ya fue tomado." FontAttributes="Bold" />
+                                    <Span Text=" Elige otro de los libres. Tus datos y el motivo se conservaron." />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </Border>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource SectionLabel}" Text="1. Médico" />
+
+                    <Border Style="{StaticResource CardBorder}" IsVisible="{Binding TarjetaMedicoVisible}">
+                        <Grid ColumnDefinitions="48,*,Auto" ColumnSpacing="12">
+                            <Border
+                                WidthRequest="48"
+                                HeightRequest="48"
+                                BackgroundColor="{StaticResource PrimaryTint}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 24"
+                                VerticalOptions="Center">
+                                <Label
+                                    Text="{Binding MedicoIniciales}"
+                                    FontAttributes="Bold"
+                                    TextColor="{StaticResource PrimaryDark}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label Text="{Binding MedicoNombre}" FontAttributes="Bold" />
+                                <Label Style="{StaticResource HintLabel}" Text="{Binding MedicoDetalle}" />
+                            </VerticalStackLayout>
+                            <Button
+                                Grid.Column="2"
+                                Style="{StaticResource TextButton}"
+                                Text="Cambiar"
+                                Padding="8,0"
+                                VerticalOptions="Center"
+                                Command="{Binding CambiarMedicoCommand}"
+                                SemanticProperties.Description="Cambiar de médico" />
+                        </Grid>
+                    </Border>
+
+                    <VerticalStackLayout
+                        Spacing="8"
+                        IsVisible="{Binding ListaMedicosVisible}"
+                        BindableLayout.ItemsSource="{Binding Medicos}"
+                        SemanticProperties.Description="Médicos disponibles">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:MedicoOpcion">
+                                <Border
+                                    Style="{StaticResource CardBorder}"
+                                    MinimumHeightRequest="56"
+                                    Padding="12,8"
+                                    SemanticProperties.Description="{Binding Descripcion}">
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding Seleccionado}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryTint}" />
+                                            <Setter Property="Stroke" Value="{StaticResource Primary}" />
+                                            <Setter Property="StrokeThickness" Value="2" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    <Grid ColumnDefinitions="40,*,Auto" ColumnSpacing="12">
+                                        <Border
+                                            WidthRequest="40"
+                                            HeightRequest="40"
+                                            BackgroundColor="{StaticResource PrimaryTint}"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 20"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                Text="{Binding Iniciales}"
+                                                FontSize="14"
+                                                FontAttributes="Bold"
+                                                TextColor="{StaticResource PrimaryDark}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding Nombre}" FontAttributes="Bold" />
+                                            <Label Style="{StaticResource HintLabel}" Text="{Binding Detalle}" />
+                                        </VerticalStackLayout>
+                                        <Image
+                                            Grid.Column="2"
+                                            Source="ic_check_primary"
+                                            WidthRequest="20"
+                                            HeightRequest="20"
+                                            VerticalOptions="Center"
+                                            IsVisible="{Binding Seleccionado}"
+                                            AutomationProperties.IsInAccessibleTree="False" />
+                                    </Grid>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ElegirCommand}" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <controls:MensajeError Text="{Binding ErrorMedico}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource SectionLabel}" Text="2. Fecha" />
+                    <controls:FechasStrip x:Name="TiraFechas" ItemsSource="{Binding Fechas}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource SectionLabel}" Text="3. Horario" />
+                    <Label
+                        Style="{StaticResource HintLabel}"
+                        IsVisible="{Binding SinSeleccionParaBloques}"
+                        Text="Elige un médico y una fecha para ver los horarios libres." />
+                    <FlexLayout
+                        Wrap="Wrap"
+                        IsVisible="{Binding HayBloques}"
+                        BindableLayout.ItemsSource="{Binding Bloques}"
+                        SemanticProperties.Description="Horarios libres">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:BloqueItem">
+                                <controls:ChipView
+                                    Margin="0,0,8,8"
+                                    Text="{Binding Hora}"
+                                    IsSelected="{Binding Elegido}"
+                                    IsDisabled="{Binding Deshabilitado}"
+                                    DisabledLabel="{Binding EstadoTexto}"
+                                    Command="{Binding ElegirCommand}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                    <Label
+                        Style="{StaticResource HintLabel}"
+                        IsVisible="{Binding SinLibres}"
+                        Text="No quedan horarios libres este día. Elige otra fecha." />
+                    <controls:MensajeError Text="{Binding ErrorHorario}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="4">
+                    <Label Style="{StaticResource SectionLabel}" Text="4. Motivo" />
+                    <Label Style="{StaticResource FieldLabel}" Text="Motivo de la consulta" />
+                    <Border Style="{StaticResource FieldBorder}" Padding="11,4">
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding HayErrorMotivo}" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource Danger}" />
+                                <Setter Property="StrokeThickness" Value="2" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <Editor
+                            HeightRequest="112"
+                            Text="{Binding Motivo, Mode=TwoWay}"
+                            MaxLength="{Binding MaximoMotivo}"
+                            Placeholder="Describe brevemente por qué solicitas la cita"
+                            SemanticProperties.Description="Motivo de la consulta" />
+                    </Border>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <controls:MensajeError Text="{Binding ErrorMotivo}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource CaptionLabel}"
+                            HorizontalTextAlignment="End"
+                            Text="{Binding ContadorMotivo}"
+                            SemanticProperties.Description="Caracteres usados" />
+                    </Grid>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ScrollView Grid.Row="1" IsVisible="{Binding MostrarProgramada}">
+            <VerticalStackLayout Padding="16" Spacing="16">
+                <VerticalStackLayout Spacing="12" HorizontalOptions="Center" Padding="0,8,0,0">
+                    <Border
+                        WidthRequest="72"
+                        HeightRequest="72"
+                        HorizontalOptions="Center"
+                        BackgroundColor="{StaticResource SuccessTint}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 36">
+                        <Image
+                            Source="ic_check_big"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                    </Border>
+                    <Label
+                        Style="{StaticResource DialogTitleLabel}"
+                        HorizontalTextAlignment="Center"
+                        Text="Cita programada" />
+                    <Label
+                        Style="{StaticResource HintLabel}"
+                        HorizontalTextAlignment="Center"
+                        Text="Guardamos tu cita. Puedes cancelarla desde el historial." />
+                </VerticalStackLayout>
+
+                <Border Style="{StaticResource CardBorder}">
+                    <controls:DatosLista ItemsSource="{Binding DatosProgramada}" />
+                </Border>
+
+                <Button
+                    Text="Ver mi historial"
+                    Command="{Binding HistorialCommand}"
+                    SemanticProperties.Description="Ver mi historial" />
+                <Button
+                    Style="{StaticResource SecondaryButton}"
+                    Text="Solicitar otra cita"
+                    Command="{Binding NuevaCommand}"
+                    SemanticProperties.Description="Solicitar otra cita" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border
+            Grid.Row="2"
+            BackgroundColor="{StaticResource Surface}"
+            Stroke="{StaticResource Divider}"
+            StrokeThickness="1"
+            StrokeShape="Rectangle"
+            Padding="16,12"
+            IsVisible="{Binding MostrarFormulario}">
+            <Border.Shadow>
+                <Shadow Brush="#102426" Opacity="0.08" Offset="0,-4" Radius="12" />
+            </Border.Shadow>
+            <Button
+                Text="Revisar y confirmar"
+                Command="{Binding RevisarCommand}"
+                SemanticProperties.Description="Revisar y confirmar" />
+        </Border>
     </Grid>
 </ContentPage>

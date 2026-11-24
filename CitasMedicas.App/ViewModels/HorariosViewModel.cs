@@ -129,15 +129,9 @@ public sealed class HorariosViewModel : ObservableObject
     private void ConstruirFechas(DateTime hoy, DateTime hasta)
     {
         Fechas.Clear();
-        var dia = hoy;
-        while (Fechas.Count < DiasVisibles || Fechas[^1].Fecha < hasta)
+        foreach (var fecha in FechaItem.Proximas(hoy, hasta, DiasVisibles, SeleccionarFecha))
         {
-            if (HorarioService.EsDiaHabil(dia))
-            {
-                Fechas.Add(new FechaItem(dia, dia == hoy, SeleccionarFecha));
-            }
-
-            dia = dia.AddDays(1);
+            Fechas.Add(fecha);
         }
     }
 

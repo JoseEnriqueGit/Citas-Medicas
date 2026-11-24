@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="CitasMedicas.App.Controls.DatosLista"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:CitasMedicas.App.ViewModels"
+    x:Name="Root">
+    <VerticalStackLayout
+        Spacing="8"
+        BindableLayout.ItemsSource="{Binding ItemsSource, Source={x:Reference Root}}">
+        <BindableLayout.ItemTemplate>
+            <DataTemplate x:DataType="vm:DatoItem">
+                <Grid
+                    ColumnDefinitions="88,*"
+                    ColumnSpacing="12"
+                    SemanticProperties.Description="{Binding Descripcion}">
+                    <Label Style="{StaticResource HintLabel}" Text="{Binding Etiqueta}" />
+                    <Grid Grid.Column="1" ColumnDefinitions="Auto,*">
+                        <Image
+                            Source="{Binding Icono}"
+                            IsVisible="{Binding TieneIcono}"
+                            WidthRequest="16"
+                            HeightRequest="16"
+                            Margin="0,0,6,0"
+                            VerticalOptions="Start"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource BoldLabel}"
+                            FontSize="14"
+                            Text="{Binding Valor}" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+        </BindableLayout.ItemTemplate>
+    </VerticalStackLayout>
+</ContentView>
