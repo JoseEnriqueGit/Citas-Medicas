@@ -23,7 +23,7 @@ Estado: andamiaje y diseño de UI listos; falta toda la implementación. Diseño
 | T4 | S7 | inline | App: `Colors.xaml` y `Styles.xaml` desde `design/system.md`, Shell con 5 pestañas, inyección de dependencias, quitar la plantilla | 162a1fe |
 | T5 | S1 | inline | Pantalla Registro (3 estados) | 443daec |
 | T6 | S2 S3 | inline | Pantallas Médicos y Horarios (6 estados) | 12f3b9d |
-| T7 | S4 | inline | Pantalla Solicitar cita (4 estados, diálogo de confirmación) | |
+| T7 | S4 | inline | Pantalla Solicitar cita (4 estados, diálogo de confirmación) | 9311152 |
 | T8 | S5 | inline | Pantalla Historial (3 estados, diálogo de cancelación) | |
 | T9 | S1-S7 | inline | Verificación en emulador: flujo completo por `adb`, capturas, README final | |
 

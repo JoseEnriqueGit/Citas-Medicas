@@ -4,19 +4,193 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:CitasMedicas.App.Controls"
-    Title="Historial"
-    BackgroundColor="{StaticResource Background}"
-    Shell.NavBarIsVisible="False">
-    <Grid RowDefinitions="Auto,*">
+    xmlns:vm="clr-namespace:CitasMedicas.App.ViewModels"
+    x:DataType="vm:HistorialViewModel"
+    Title="Historial">
+    <Grid RowDefinitions="Auto,Auto,*">
         <controls:AppBar
             Title="Historial"
-            PatientName="{Binding NombrePaciente}"
-            SemanticProperties.Description="Barra superior de Historial" />
-        <Label
+            PatientName="{Binding Estado.NombrePaciente}" />
+
+        <VerticalStackLayout
+            Grid.Row="2"
+            Padding="16,48"
+            Spacing="12"
+            VerticalOptions="Start"
+            IsVisible="{Binding SinPaciente}">
+            <Label
+                Style="{StaticResource DialogTitleLabel}"
+                HorizontalTextAlignment="Center"
+                Text="Aún no estás registrado" />
+            <Label
+                Style="{StaticResource HintLabel}"
+                HorizontalTextAlignment="Center"
+                Text="Regístrate para ver tu historial de citas." />
+            <Button
+                Text="Ir a Registro"
+                HorizontalOptions="Center"
+                Padding="24,12"
+                Command="{Binding RegistrarseCommand}"
+                SemanticProperties.Description="Ir a Registro" />
+        </VerticalStackLayout>
+
+        <VerticalStackLayout
             Grid.Row="1"
-            Text="Historial"
-            Style="{StaticResource TitleLabel}"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+            Padding="16,16,16,8"
+            Spacing="12"
+            IsVisible="{Binding HayPaciente}">
+            <Border Style="{StaticResource BannerSuccess}" IsVisible="{Binding AvisoVisible}" SemanticProperties.Description="Cita cancelada. El horario quedó libre.">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Image
+                        Source="ic_check_success"
+                        WidthRequest="20"
+                        HeightRequest="20"
+                        VerticalOptions="Start"
+                        AutomationProperties.IsInAccessibleTree="False" />
+                    <Label Grid.Column="1" Style="{StaticResource BannerSuccessText}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Cita cancelada." FontAttributes="Bold" />
+                                <Span Text=" El horario quedó libre." />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+            </Border>
+
+            <ScrollView
+                Orientation="Horizontal"
+                HorizontalScrollBarVisibility="Never"
+                SemanticProperties.Description="Filtrar por estado">
+                <HorizontalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Filtros}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:FiltroHistorialItem">
+                            <controls:ChipView
+                                Text="{Binding Nombre}"
+                                IsSelected="{Binding Seleccionado}"
+                                Command="{Binding ElegirCommand}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <Label Style="{StaticResource HintLabel}" IsVisible="{Binding MostrarResumen}">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding ResumenCantidad}" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        <Span Text="{Binding ResumenDetalle}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </VerticalStackLayout>
+
+        <CollectionView
+            Grid.Row="2"
+            ItemsSource="{Binding Items}"
+            SelectionMode="None"
+            Margin="16,0"
+            IsVisible="{Binding HayPaciente}"
+            SemanticProperties.Description="Citas">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.Footer>
+                <BoxView HeightRequest="8" Color="Transparent" />
+            </CollectionView.Footer>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:HistorialItem">
+                    <Border Style="{StaticResource CardBorder}">
+                        <Grid ColumnDefinitions="64,*" ColumnSpacing="12">
+                            <Border
+                                BackgroundColor="{StaticResource Background}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                VerticalOptions="Start"
+                                Padding="4,8"
+                                AutomationProperties.IsInAccessibleTree="False">
+                                <VerticalStackLayout HorizontalOptions="Center">
+                                    <Label Style="{StaticResource CaptionLabel}" HorizontalTextAlignment="Center" Text="{Binding MesCorto}" />
+                                    <Label FontSize="24" FontAttributes="Bold" HorizontalTextAlignment="Center" Text="{Binding Dia}" />
+                                    <Label Style="{StaticResource CaptionLabel}" FontAttributes="Bold" TextColor="{StaticResource Ink}" HorizontalTextAlignment="Center" Text="{Binding Hora}" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <VerticalStackLayout SemanticProperties.Description="{Binding Descripcion}">
+                                    <Label Text="{Binding Nombre}" FontAttributes="Bold" />
+                                    <Label Style="{StaticResource HintLabel}" Text="{Binding EspecialidadCentro}" />
+                                    <Label Style="{StaticResource HintLabel}" Text="{Binding Motivo}" />
+                                </VerticalStackLayout>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="0,6,0,0">
+                                    <Border
+                                        BackgroundColor="{Binding EstadoFondo}"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 16"
+                                        Padding="10,6"
+                                        VerticalOptions="Center"
+                                        AutomationProperties.IsInAccessibleTree="False">
+                                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="6">
+                                            <Image
+                                                Source="{Binding EstadoIcono}"
+                                                WidthRequest="16"
+                                                HeightRequest="16"
+                                                VerticalOptions="Center" />
+                                            <Label
+                                                Grid.Column="1"
+                                                FontSize="14"
+                                                FontAttributes="Bold"
+                                                TextColor="{Binding EstadoTinta}"
+                                                VerticalOptions="Center"
+                                                Text="{Binding EstadoTexto}" />
+                                        </Grid>
+                                    </Border>
+                                    <Button
+                                        Grid.Column="1"
+                                        Style="{StaticResource DangerTextButton}"
+                                        Text="Cancelar cita"
+                                        HorizontalOptions="End"
+                                        IsVisible="{Binding EsProgramada}"
+                                        Command="{Binding CancelarCommand}"
+                                        SemanticProperties.Description="{Binding DescripcionCancelar}" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Spacing="12" Padding="16,32" HorizontalOptions="Center">
+                    <Border
+                        WidthRequest="72"
+                        HeightRequest="72"
+                        HorizontalOptions="Center"
+                        BackgroundColor="{StaticResource PrimaryTint}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 36">
+                        <Image
+                            Source="ic_calendar_primary"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                    </Border>
+                    <Label
+                        Style="{StaticResource DialogTitleLabel}"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding VacioTitulo}" />
+                    <Label
+                        Style="{StaticResource HintLabel}"
+                        HorizontalTextAlignment="Center"
+                        MaximumWidthRequest="280"
+                        Text="{Binding VacioTexto}" />
+                    <Button
+                        Text="{Binding VacioAccion}"
+                        HorizontalOptions="Center"
+                        Padding="24,12"
+                        Command="{Binding AccionVaciaCommand}"
+                        SemanticProperties.Description="{Binding VacioAccion}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
     </Grid>
 </ContentPage>

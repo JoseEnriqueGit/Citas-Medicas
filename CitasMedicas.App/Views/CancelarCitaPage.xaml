@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CitasMedicas.App.Views.CancelarCitaPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:CitasMedicas.App.Controls"
+    BackgroundColor="#8F102426"
+    Title="Cancelar cita">
+    <ScrollView VerticalOptions="Center">
+        <Border
+            Margin="20"
+            Padding="24"
+            BackgroundColor="{StaticResource Surface}"
+            Stroke="{StaticResource Divider}"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 16">
+            <Border.Shadow>
+                <Shadow Brush="#102426" Opacity="0.24" Offset="0,8" Radius="24" />
+            </Border.Shadow>
+            <VerticalStackLayout Spacing="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Style="{StaticResource DialogTitleLabel}" Text="¿Cancelar esta cita?" />
+                    <Label
+                        Style="{StaticResource HintLabel}"
+                        Text="El horario quedará libre para otros pacientes. Esta acción no se puede deshacer." />
+                </VerticalStackLayout>
+                <controls:DatosLista x:Name="Datos" />
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="Mantener cita"
+                        Clicked="OnMantener"
+                        SemanticProperties.Description="Mantener cita" />
+                    <Button
+                        Grid.Column="1"
+                        Style="{StaticResource DangerButton}"
+                        Text="Cancelar cita"
+                        Clicked="OnCancelar"
+                        SemanticProperties.Description="Cancelar cita" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+    </ScrollView>
+</ContentPage>
