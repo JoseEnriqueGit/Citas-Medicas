@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chosen": "07-registrar-medico.html",
+  "chosen": "08-reportes.html",
   "handoffs": {
     "01-registro.html": {
       "status": "implemented",
@@ -55,6 +55,15 @@
       "implementedAt": "2026-11-24T22:52:00.369Z",
       "feature": "odd/tasks/citas-medicas.md",
       "note": "Ya implementado en la app: botón Agregar médico, formulario modal con chips de especialidad, errores a la vez, aviso y actualización en tiempo real de Médicos y Solicitar (evidence/t12-med-*)."
+    },
+    "08-reportes.html": {
+      "status": "implemented",
+      "queued": false,
+      "sentAt": "2026-11-24T23:14:03.393Z",
+      "startedAt": null,
+      "implementedAt": "2026-11-24T23:14:11.476Z",
+      "feature": "odd/tasks/citas-medicas.md",
+      "note": "Reportes implementado: modal desde Médicos, chips de período, tarjetas por estado, citas por médico y por especialidad, exportar CSV y compartir (evidence/t14-rep-*)."
     }
   }
 }
