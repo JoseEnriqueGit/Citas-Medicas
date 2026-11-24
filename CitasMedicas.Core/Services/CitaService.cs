@@ -45,7 +45,7 @@ public sealed class CitaService
         var errores = new Dictionary<CampoSolicitud, string>();
         var ahora = _reloj.GetLocalNow().DateTime;
 
-        if (pacienteId is null || _repositorio.ObtenerPaciente(pacienteId.Value) is null)
+        if (pacienteId is null || _repositorio.ObtenerPaciente(pacienteId.Value) is not { Activo: true })
         {
             errores[CampoSolicitud.Paciente] = "Regístrate para solicitar una cita.";
         }
@@ -119,6 +119,7 @@ public sealed class CitaService
         var medicos = _repositorio.ListarMedicos().ToDictionary(m => m.Id);
         return _repositorio.CitasDePaciente(pacienteId)
             .Where(c => estado is null || c.Estado == estado)
+            .Where(c => medicos.ContainsKey(c.MedicoId))
             .Select(c => new ItemHistorial(c, medicos[c.MedicoId]))
             .ToList();
     }

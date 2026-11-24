@@ -25,7 +25,7 @@ public sealed class HorarioService
 
     public static bool EsInicioDeBloque(DateTime inicio)
     {
-        if (!EsDiaHabil(inicio) || inicio.Second != 0 || inicio.Millisecond != 0 || inicio.Minute % MinutosPorBloque != 0)
+        if (!EsDiaHabil(inicio) || inicio.Ticks % TimeSpan.TicksPerMinute != 0 || inicio.Minute % MinutosPorBloque != 0)
         {
             return false;
         }
@@ -37,7 +37,7 @@ public sealed class HorarioService
     {
         var dia = fecha.Date;
         var ahora = Ahora;
-        if (!EsDiaHabil(dia) || dia < ahora.Date)
+        if (!EsDiaHabil(dia) || dia < ahora.Date || _repositorio.ObtenerMedico(medicoId) is null)
         {
             return Array.Empty<BloqueHorario>();
         }

@@ -195,6 +195,7 @@ public sealed class CitasRepository : IDisposable
             return _db.Table<Cita>()
                 .Where(c => c.PacienteId == pacienteId)
                 .OrderByDescending(c => c.Inicio)
+                .ThenByDescending(c => c.Id)
                 .ToList();
         }
     }

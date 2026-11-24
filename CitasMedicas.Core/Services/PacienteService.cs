@@ -32,6 +32,10 @@ public sealed class ResultadoRegistro
 
 public sealed partial class PacienteService
 {
+    public const int MaximoTexto = 100;
+
+    private static readonly DateTime FechaNacimientoMinima = new(1900, 1, 1);
+
     private readonly CitasRepository _repositorio;
     private readonly TimeProvider _reloj;
 
@@ -63,6 +67,9 @@ public sealed partial class PacienteService
 
     public ResultadoRegistro Actualizar(int id, RegistroPaciente registro)
     {
+        var existente = _repositorio.ObtenerPaciente(id)
+            ?? throw new KeyNotFoundException($"No existe el paciente {id}.");
+
         var (datos, errores) = Validar(registro, id);
         if (errores.Count > 0)
         {
@@ -70,7 +77,7 @@ public sealed partial class PacienteService
         }
 
         datos!.Id = id;
-        datos.Activo = true;
+        datos.Activo = existente.Activo;
         try
         {
             _repositorio.ActualizarPaciente(datos);
@@ -91,6 +98,10 @@ public sealed partial class PacienteService
         {
             errores[CampoPaciente.NombreCompleto] = "Escribe tu nombre completo.";
         }
+        else if (nombre.Length > MaximoTexto)
+        {
+            errores[CampoPaciente.NombreCompleto] = $"El nombre no puede pasar de {MaximoTexto} caracteres.";
+        }
 
         var cedula = (registro.Cedula ?? "").Trim();
         if (!CedulaRegex().IsMatch(cedula))
@@ -102,14 +113,15 @@ public sealed partial class PacienteService
             errores[CampoPaciente.Cedula] = "Esta cédula ya está registrada.";
         }
 
-        var digitos = new string((registro.Telefono ?? "").Where(char.IsAsciiDigit).ToArray());
-        if (digitos.Length != 10)
+        var telefonoCrudo = registro.Telefono ?? "";
+        var digitos = new string(telefonoCrudo.Where(char.IsAsciiDigit).ToArray());
+        if (digitos.Length != 10 || !telefonoCrudo.All(EsCaracterDeTelefono))
         {
             errores[CampoPaciente.Telefono] = "Escribe 10 dígitos: 809-555-0142.";
         }
 
         var correo = (registro.Correo ?? "").Trim();
-        if (correo.Length > 0 && !CorreoRegex().IsMatch(correo))
+        if (correo.Length > 0 && (correo.Length > MaximoTexto || !CorreoRegex().IsMatch(correo)))
         {
             errores[CampoPaciente.Correo] = "El correo no es válido.";
         }
@@ -121,6 +133,10 @@ public sealed partial class PacienteService
         else if (registro.FechaNacimiento.Value.Date > _reloj.GetLocalNow().Date)
         {
             errores[CampoPaciente.FechaNacimiento] = "La fecha de nacimiento no puede ser futura.";
+        }
+        else if (registro.FechaNacimiento.Value.Date < FechaNacimientoMinima)
+        {
+            errores[CampoPaciente.FechaNacimiento] = "La fecha de nacimiento no es válida.";
         }
 
         if (errores.Count > 0)
@@ -155,9 +171,12 @@ public sealed partial class PacienteService
         return actual?.Cedula != cedula;
     }
 
-    [GeneratedRegex(@"^\d{3}-\d{7}-\d$")]
+    private static bool EsCaracterDeTelefono(char c) =>
+        char.IsAsciiDigit(c) || c is ' ' or '-' or '(' or ')' or '.';
+
+    [GeneratedRegex(@"^[0-9]{3}-[0-9]{7}-[0-9]$")]
     private static partial Regex CedulaRegex();
 
-    [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
+    [GeneratedRegex(@"^[^@\s.]+(\.[^@\s.]+)*@[^@\s.]+(\.[^@\s.]+)+$")]
     private static partial Regex CorreoRegex();
 }
