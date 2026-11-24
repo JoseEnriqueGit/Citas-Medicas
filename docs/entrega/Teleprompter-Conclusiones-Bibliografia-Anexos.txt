@@ -1,187 +1,122 @@
-Para cerrar el trabajo,
-presento las conclusiones,
-la bibliografía
-y los anexos.
+Para cerrar el trabajo, presento las conclusiones, la bibliografía y los
+anexos.
 
 Empiezo por las conclusiones.
 
-Construimos una aplicación móvil para Android,
-con .NET MAUI y el lenguaje C#.
+Construimos una aplicación móvil para Android, con .NET MAUI y el lenguaje
+C#.
 
-Con ella, un paciente puede registrarse,
-consultar médicos,
-ver los horarios disponibles,
-solicitar una cita
-y revisar su historial.
+Con ella, un paciente puede registrarse, consultar médicos, ver los horarios
+disponibles, solicitar una cita y revisar su historial.
 
-Es una aplicación funcional.
-Tiene ciento diecinueve pruebas automáticas
-y la verificamos también en un emulador de Android.
+Es una aplicación funcional. Tiene ciento diecinueve pruebas automáticas y
+la verificamos también en un emulador de Android.
 
 Teníamos seis objetivos específicos.
 
-Tres se cumplieron por completo:
-el registro del paciente,
-la reserva de citas con verificación de disponibilidad,
-y el historial de citas.
+Tres se cumplieron por completo: el registro del paciente, la reserva de
+citas con verificación de disponibilidad, y el historial de citas.
 
-Los otros tres se cumplieron de forma parcial:
-en los médicos, filtramos por nombre y especialidad,
-pero no por centro ni por disponibilidad.
-En los horarios, se puede cancelar una cita,
-pero todavía no reprogramarla.
-Y en seguridad, pedimos solo los datos necesarios,
-pero no hay autenticación ni cifrado.
+Los otros tres se cumplieron de forma parcial: en los médicos, filtramos por
+nombre y especialidad, pero no por centro ni por disponibilidad. En los
+horarios, se puede cancelar una cita, pero todavía no reprogramarla. Y en
+seguridad, pedimos solo los datos necesarios, pero no hay autenticación ni
+cifrado.
 
-Primero: evitamos las dobles reservas.
-La regla no solo está en el código.
-La impone la propia base de datos
-con un índice único.
-Probamos veinte solicitudes al mismo horario
-y solo una fue aceptada.
+Primero: evitamos las dobles reservas. La regla no solo está en el código.
+La impone la propia base de datos con un índice único. Probamos veinte
+solicitudes al mismo horario y solo una fue aceptada.
 
-Segundo: probamos más allá del caso feliz.
-Probamos datos inválidos,
-límites de hora,
-accesos simultáneos
-y archivos dañados.
-Así encontramos y corregimos errores reales.
+Segundo: probamos más allá del caso feliz. Probamos datos inválidos,
+límites de hora, accesos simultáneos y archivos dañados. Así encontramos
+y corregimos errores reales.
 
-Tercero: probar a mano también importa.
-En el emulador aparecieron fallos
-que las pruebas automáticas no veían.
-Por ejemplo, un conflicto entre librerías de SQLite
-que impedía abrir la aplicación en Android.
-Los corregimos y los volvimos a verificar.
+Tercero: probar a mano también importa. En el emulador aparecieron fallos
+que las pruebas automáticas no veían. Por ejemplo, un conflicto entre
+librerías de SQLite que impedía abrir la aplicación en Android. Los
+corregimos y los volvimos a verificar.
 
-Cuarto: cuidamos la interfaz.
-Colores con buen contraste,
-botones fáciles de tocar,
-y mensajes claros en cada operación.
+Cuarto: cuidamos la interfaz. Colores con buen contraste, botones fáciles de
+tocar, y mensajes claros en cada operación.
 
-Quinto: la aplicación se recupera de fallos.
-Si el archivo de datos se daña,
-no se cierra:
-permite reintentar o empezar de cero,
-y guarda una copia del archivo afectado.
+Quinto: la aplicación se recupera de fallos. Si el archivo de datos se
+daña, no se cierra: permite reintentar o empezar de cero, y guarda una copia
+del archivo afectado.
 
 Hay que ser honestos con el alcance.
 
-Los datos se guardan en el teléfono.
-No hay servidor.
+Los datos se guardan en el teléfono. No hay servidor.
 
-No hay cuentas ni contraseñas.
-Por eso no implementamos el inicio de sesión
-ni el cifrado de contraseñas
-que pedían nuestros requisitos.
+No hay cuentas ni contraseñas. Por eso no implementamos el inicio de sesión
+ni el cifrado de contraseñas que pedían nuestros requisitos.
 
-No hay reprogramación.
-Si alguien quiere cambiar una cita,
-la cancela y pide otra.
+No hay reprogramación. Si alguien quiere cambiar una cita, la cancela y pide
+otra.
 
-Todos los médicos tienen el mismo horario,
-y los nueve médicos son datos de ejemplo.
+Todos los médicos tienen el mismo horario, y los nueve médicos son datos de
+ejemplo.
 
-Y probamos en un emulador,
-no en teléfonos físicos.
+Y probamos en un emulador, no en teléfonos físicos.
 
 Como trabajo futuro:
 
-Primero, un servidor con autenticación
-y comunicación protegida.
+Primero, un servidor con autenticación y comunicación protegida.
 
-Segundo, revisar el manejo de datos personales
-según la Ley 172-13 de República Dominicana.
+Segundo, revisar el manejo de datos personales según la Ley 172-13 de
+República Dominicana.
 
-Tercero, agregar la reprogramación
-y marcar las citas como completadas.
+Tercero, agregar la reprogramación y marcar las citas como completadas.
 
-Cuarto, horarios por centro médico
-y filtros por centro y disponibilidad.
+Cuarto, horarios por centro médico y filtros por centro y disponibilidad.
 
-Y quinto, recordatorios,
-y pruebas en teléfonos reales.
+Y quinto, recordatorios, y pruebas en teléfonos reales.
 
-En conclusión, el proyecto cumplió su propósito principal:
-ordenar la solicitud de citas médicas,
-evitar que un mismo horario se reserve dos veces,
-y dejar un historial que se puede consultar.
+En conclusión, el proyecto cumplió su propósito principal: ordenar la
+solicitud de citas médicas, evitar que un mismo horario se reserve dos
+veces, y dejar un historial que se puede consultar.
 
-Las limitaciones no invalidan el resultado.
-Marcan el alcance de esta primera versión
-y la ruta para mejorarla.
+Las limitaciones no invalidan el resultado. Marcan el alcance de esta primera
+versión y la ruta para mejorarla.
 
 Sigo con la bibliografía.
 
-Las referencias siguen el formato APA,
-séptima edición.
+Las referencias siguen el formato APA, séptima edición.
 
-Usamos doce fuentes,
-de cuatro tipos.
+Usamos doce fuentes, de cuatro tipos.
 
-Libros de ingeniería de software:
-Beck, Pressman y Maxim, y Sommerville.
+Libros de ingeniería de software: Beck, Pressman y Maxim, y Sommerville.
 
-Normas y leyes:
-la norma ISO 25010 de calidad de software,
-las pautas de accesibilidad WCAG 2.2,
-y la Ley 172-13 de protección de datos personales.
+Normas y leyes: la norma ISO 25010 de calidad de software, las pautas de
+accesibilidad WCAG 2.2, y la Ley 172-13 de protección de datos personales.
 
-Documentación técnica:
-Microsoft para .NET MAUI,
-SQLite, sqlite-net y xUnit.
+Documentación técnica: Microsoft para .NET MAUI, SQLite, sqlite-net y xUnit.
 
-Y en usabilidad:
-los diez principios de Jakob Nielsen.
+Y en usabilidad: los diez principios de Jakob Nielsen.
 
 Termino con los anexos.
 
-Los anexos reúnen la evidencia técnica del proyecto.
-Son ocho.
+Los anexos reúnen la evidencia técnica del proyecto. Son ocho.
 
-Anexo A y B.
-La trazabilidad de los requisitos.
-Cada requisito del grupo,
-con su estado:
-cumplido, parcial o no implementado.
+Anexo A y B. La trazabilidad de los requisitos. Cada requisito del grupo, con
+su estado: cumplido, parcial o no implementado.
 
-Anexo C.
-El modelo de datos.
-Tres tablas:
-Paciente, Médico y Cita,
-y el índice que evita los horarios duplicados.
+Anexo C. El modelo de datos. Tres tablas: Paciente, Médico y Cita, y el
+índice que evita los horarios duplicados.
 
-Anexo D.
-La arquitectura.
-Tres proyectos:
-el núcleo con las reglas,
-las pruebas,
-y la aplicación móvil.
+Anexo D. La arquitectura. Tres proyectos: el núcleo con las reglas, las
+pruebas, y la aplicación móvil.
 
-Anexo E.
-Las reglas de negocio.
-Por ejemplo, la cédula única,
-los bloques de treinta minutos,
-y que solo se cancelan citas programadas.
+Anexo E. Las reglas de negocio. Por ejemplo, la cédula única, los bloques
+de treinta minutos, y que solo se cancelan citas programadas.
 
-Anexo F.
-Dieciocho capturas de pantalla
-de todas las pantallas y estados.
+Anexo F. Dieciocho capturas de pantalla de todas las pantallas y estados.
 
-Aquí se ve cuando otro ocupa el horario:
-la aplicación avisa,
-no guarda nada,
-y conserva lo que el usuario escribió.
+Aquí se ve cuando otro ocupa el horario: la aplicación avisa, no guarda
+nada, y conserva lo que el usuario escribió.
 
-Anexo G.
-Los resultados de las pruebas.
-Ciento diecinueve aprobadas
-y ninguna fallida,
-más seis escenarios verificados en el emulador.
+Anexo G. Los resultados de las pruebas. Ciento diecinueve aprobadas y ninguna
+fallida, más seis escenarios verificados en el emulador.
 
-Anexo H.
-La guía para ejecutar la aplicación.
+Anexo H. La guía para ejecutar la aplicación.
 
-Con esto concluyo mi parte.
-Muchas gracias.
-Quedo atento a sus preguntas.
+Con esto concluyo mi parte. Muchas gracias. Quedo atento a sus preguntas.
