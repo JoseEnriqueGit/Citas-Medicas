@@ -238,6 +238,25 @@ public sealed class CitasRepository : IDisposable
         }
     }
 
+    public IReadOnlyList<Cita> CitasEnRango(DateTime? desde, DateTime? hastaExclusivo)
+    {
+        lock (_gate)
+        {
+            var consulta = _db.Table<Cita>();
+            if (desde is { } inicio)
+            {
+                consulta = consulta.Where(c => c.Inicio >= inicio);
+            }
+
+            if (hastaExclusivo is { } fin)
+            {
+                consulta = consulta.Where(c => c.Inicio < fin);
+            }
+
+            return consulta.OrderBy(c => c.Inicio).ThenBy(c => c.Id).ToList();
+        }
+    }
+
     public IReadOnlyList<Cita> CitasDePaciente(int pacienteId)
     {
         lock (_gate)
