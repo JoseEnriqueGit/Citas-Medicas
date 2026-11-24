@@ -20,8 +20,18 @@ public sealed class HorarioService
 
     public DateTime Ahora => _reloj.GetLocalNow().DateTime;
 
-    public bool EsDiaHabil(DateTime fecha) =>
+    public static bool EsDiaHabil(DateTime fecha) =>
         fecha.DayOfWeek is not (DayOfWeek.Saturday or DayOfWeek.Sunday);
+
+    public static bool EsInicioDeBloque(DateTime inicio)
+    {
+        if (!EsDiaHabil(inicio) || inicio.Second != 0 || inicio.Millisecond != 0 || inicio.Minute % MinutosPorBloque != 0)
+        {
+            return false;
+        }
+
+        return inicio.Hour >= HoraApertura && inicio.Hour < HoraCierre;
+    }
 
     public IReadOnlyList<BloqueHorario> Bloques(int medicoId, DateTime fecha)
     {

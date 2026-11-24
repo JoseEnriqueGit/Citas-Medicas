@@ -70,7 +70,7 @@ public class HorarioServiceTests : IDisposable
     {
         var fecha = new DateTime(anio, mes, dia);
 
-        Assert.False(_servicio.EsDiaHabil(fecha));
+        Assert.False(HorarioService.EsDiaHabil(fecha));
         Assert.Empty(_servicio.Bloques(_medico.Id, fecha));
     }
 
@@ -187,7 +187,7 @@ public class HorarioServiceTests : IDisposable
     {
         for (var dia = Martes.Date; dia <= Martes.Date.AddDays(HorarioService.DiasDeBusqueda); dia = dia.AddDays(1))
         {
-            if (_servicio.EsDiaHabil(dia))
+            if (HorarioService.EsDiaHabil(dia))
             {
                 LlenarDia(_medico, dia);
             }

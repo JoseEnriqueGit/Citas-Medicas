@@ -83,6 +83,14 @@ public sealed class CitasRepository : IDisposable
         }
     }
 
+    public Paciente? ObtenerPaciente(int id)
+    {
+        lock (_gate)
+        {
+            return _db.Find<Paciente>(id);
+        }
+    }
+
     public Paciente? ObtenerPacienteActivo()
     {
         lock (_gate)
