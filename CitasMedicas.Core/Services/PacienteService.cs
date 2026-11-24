@@ -10,7 +10,8 @@ public enum CampoPaciente
     Cedula,
     Telefono,
     Correo,
-    FechaNacimiento
+    FechaNacimiento,
+    Contrasena
 }
 
 public sealed record RegistroPaciente(
@@ -18,7 +19,17 @@ public sealed record RegistroPaciente(
     string? Cedula,
     string? Telefono,
     string? Correo,
-    DateTime? FechaNacimiento);
+    DateTime? FechaNacimiento,
+    string? Contrasena = null);
+
+public sealed class ResultadoInicio
+{
+    public Paciente? Paciente { get; init; }
+
+    public string? Error { get; init; }
+
+    public bool Exitoso => Paciente is not null && Error is null;
+}
 
 public sealed class ResultadoRegistro
 {
@@ -33,6 +44,10 @@ public sealed class ResultadoRegistro
 public sealed partial class PacienteService
 {
     public const int MaximoTexto = 100;
+
+    public const int MinimoContrasena = 6;
+
+    private const string CredencialesIncorrectas = "Cédula o contraseña incorrectos.";
 
     private static readonly DateTime FechaNacimientoMinima = new(1900, 1, 1);
 
@@ -51,6 +66,40 @@ public sealed partial class PacienteService
 
     public IReadOnlyList<Paciente> Listar() => _repositorio.ListarPacientes();
 
+    public ResultadoInicio IniciarSesion(string? cedula, string? contrasena)
+    {
+        var cedulaLimpia = (cedula ?? "").Trim();
+        if (cedulaLimpia.Length == 0 || string.IsNullOrWhiteSpace(contrasena))
+        {
+            return new ResultadoInicio { Error = "Escribe tu cédula y tu contraseña." };
+        }
+
+        var paciente = _repositorio.ObtenerPacientePorCedula(cedulaLimpia);
+        if (paciente is null || ErrorDeContrasena(contrasena) is not null)
+        {
+            return new ResultadoInicio { Error = CredencialesIncorrectas };
+        }
+
+        if (paciente.ContrasenaHash is null)
+        {
+            _repositorio.GuardarContrasena(paciente.Id, ContrasenaHasher.Crear(contrasena));
+        }
+        else if (!ContrasenaHasher.Verificar(contrasena, paciente.ContrasenaHash))
+        {
+            return new ResultadoInicio { Error = CredencialesIncorrectas };
+        }
+
+        _repositorio.ActivarPaciente(paciente.Id);
+        Notificar();
+        return new ResultadoInicio { Paciente = _repositorio.ObtenerPaciente(paciente.Id) };
+    }
+
+    public void CerrarSesion()
+    {
+        _repositorio.CerrarSesion();
+        Notificar();
+    }
+
     public Paciente Activar(int id)
     {
         _repositorio.ActivarPaciente(id);
@@ -60,12 +109,13 @@ public sealed partial class PacienteService
 
     public ResultadoRegistro Registrar(RegistroPaciente registro)
     {
-        var (datos, errores) = Validar(registro, null);
+        var (datos, errores) = Validar(registro, null, true);
         if (errores.Count > 0)
         {
             return new ResultadoRegistro { Errores = errores };
         }
 
+        datos!.ContrasenaHash = ContrasenaHasher.Crear(registro.Contrasena!);
         try
         {
             var paciente = _repositorio.InsertarPaciente(datos!);
@@ -83,7 +133,7 @@ public sealed partial class PacienteService
         var existente = _repositorio.ObtenerPaciente(id)
             ?? throw new KeyNotFoundException($"No existe el paciente {id}.");
 
-        var (datos, errores) = Validar(registro, id);
+        var (datos, errores) = Validar(registro, id, false);
         if (errores.Count > 0)
         {
             return new ResultadoRegistro { Errores = errores };
@@ -91,6 +141,7 @@ public sealed partial class PacienteService
 
         datos!.Id = id;
         datos.Activo = existente.Activo;
+        datos.ContrasenaHash = existente.ContrasenaHash;
         try
         {
             _repositorio.ActualizarPaciente(datos);
@@ -117,9 +168,34 @@ public sealed partial class PacienteService
         }
     }
 
-    private (Paciente? Datos, Dictionary<CampoPaciente, string> Errores) Validar(RegistroPaciente registro, int? idActual)
+    private static string? ErrorDeContrasena(string? contrasena)
+    {
+        if (string.IsNullOrWhiteSpace(contrasena))
+        {
+            return "Escribe una contraseña.";
+        }
+
+        if (contrasena.Length < MinimoContrasena)
+        {
+            return $"Usa al menos {MinimoContrasena} caracteres.";
+        }
+
+        if (contrasena.Length > MaximoTexto)
+        {
+            return $"La contraseña no puede pasar de {MaximoTexto} caracteres.";
+        }
+
+        return null;
+    }
+
+    private (Paciente? Datos, Dictionary<CampoPaciente, string> Errores) Validar(RegistroPaciente registro, int? idActual, bool exigirContrasena)
     {
         var errores = new Dictionary<CampoPaciente, string>();
+
+        if (exigirContrasena && ErrorDeContrasena(registro.Contrasena) is { } errorContrasena)
+        {
+            errores[CampoPaciente.Contrasena] = errorContrasena;
+        }
 
         var nombre = (registro.NombreCompleto ?? "").Trim();
         if (nombre.Length == 0)

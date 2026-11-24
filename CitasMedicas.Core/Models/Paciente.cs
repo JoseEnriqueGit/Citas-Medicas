@@ -19,4 +19,6 @@ public class Paciente
     public DateTime FechaNacimiento { get; set; }
 
     public bool Activo { get; set; }
+
+    public string? ContrasenaHash { get; set; }
 }

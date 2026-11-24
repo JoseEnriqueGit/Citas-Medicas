@@ -13,6 +13,7 @@
                 Text="{Binding Text, Source={x:Reference Root}, Mode=TwoWay}"
                 Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
                 Keyboard="{Binding Keyboard, Source={x:Reference Root}}"
+                IsPassword="{Binding IsPassword, Source={x:Reference Root}}"
                 MaxLength="{Binding MaxLength, Source={x:Reference Root}}" />
         </Border>
         <Label

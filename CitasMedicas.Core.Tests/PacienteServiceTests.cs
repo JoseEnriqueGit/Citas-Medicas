@@ -20,7 +20,8 @@ public class PacienteServiceTests : IDisposable
         cedula,
         "809-555-0142",
         "maria.fernandez@correo.com",
-        new DateTime(1991, 3, 14));
+        new DateTime(1991, 3, 14),
+        "clave123");
 
     [Fact]
     public void ValidRegistrationStoresAnActivePatient()
@@ -42,7 +43,7 @@ public class PacienteServiceTests : IDisposable
 
         Assert.False(resultado.Exitoso);
         Assert.Equal(
-            new[] { CampoPaciente.NombreCompleto, CampoPaciente.Cedula, CampoPaciente.Telefono, CampoPaciente.FechaNacimiento },
+            new[] { CampoPaciente.NombreCompleto, CampoPaciente.Cedula, CampoPaciente.Telefono, CampoPaciente.FechaNacimiento, CampoPaciente.Contrasena },
             resultado.Errores.Keys.OrderBy(k => k));
         Assert.Equal("Escribe tu nombre completo.", resultado.Errores[CampoPaciente.NombreCompleto]);
         Assert.Equal("Escribe la cédula con el formato 000-0000000-0.", resultado.Errores[CampoPaciente.Cedula]);
@@ -57,7 +58,7 @@ public class PacienteServiceTests : IDisposable
         _servicio.Registrar(Valido());
 
         var resultado = _servicio.Registrar(new RegistroPaciente(
-            "Carlos Jiménez", "001-1234567-8", "809-555", "carlos@correo", new DateTime(1988, 9, 2)));
+            "Carlos Jiménez", "001-1234567-8", "809-555", "carlos@correo", new DateTime(1988, 9, 2), "clave123"));
 
         Assert.False(resultado.Exitoso);
         Assert.Equal(3, resultado.Errores.Count);

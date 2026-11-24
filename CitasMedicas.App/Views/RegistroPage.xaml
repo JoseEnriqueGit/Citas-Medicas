@@ -15,6 +15,44 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="16" Spacing="16">
 
+                <VerticalStackLayout Spacing="16" IsVisible="{Binding MostrarInicio}">
+                    <Border
+                        Style="{StaticResource BannerError}"
+                        IsVisible="{Binding HayErrorInicio}"
+                        SemanticProperties.Description="{Binding ErrorInicio}">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Image
+                                Source="ic_alert_danger"
+                                WidthRequest="20"
+                                HeightRequest="20"
+                                VerticalOptions="Start"
+                                AutomationProperties.IsInAccessibleTree="False" />
+                            <Label Grid.Column="1" Style="{StaticResource BannerErrorText}" Text="{Binding ErrorInicio}" />
+                        </Grid>
+                    </Border>
+
+                    <controls:FormField
+                        Caption="Cédula"
+                        Placeholder="000-0000000-0"
+                        Text="{Binding CedulaInicio, Mode=TwoWay}"
+                        MaxLength="13" />
+
+                    <controls:FormField
+                        Caption="Contraseña"
+                        IsPassword="True"
+                        Text="{Binding ContrasenaInicio, Mode=TwoWay}"
+                        MaxLength="100" />
+
+                    <Button
+                        Text="Iniciar sesión"
+                        Command="{Binding IniciarCommand}"
+                        SemanticProperties.Description="Iniciar sesión" />
+                    <Button
+                        Style="{StaticResource TextButton}"
+                        Text="¿No tienes cuenta? Regístrate"
+                        Command="{Binding IrARegistroCommand}" />
+                </VerticalStackLayout>
+
                 <VerticalStackLayout Spacing="16" IsVisible="{Binding MostrarFormulario}">
                     <Border Style="{StaticResource BannerInfo}" IsVisible="{Binding MostrarInfo}">
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
@@ -139,10 +177,25 @@
                         </Grid>
                     </VerticalStackLayout>
 
+                    <controls:FormField
+                        x:Name="CampoContrasena"
+                        Caption="Contraseña"
+                        IsPassword="True"
+                        Hint="Mínimo 6 caracteres"
+                        Text="{Binding Contrasena, Mode=TwoWay}"
+                        Error="{Binding ErrorContrasena}"
+                        IsVisible="{Binding MostrarContrasena}"
+                        MaxLength="100" />
+
                     <Button
                         Text="{Binding TextoBoton}"
                         Command="{Binding RegistrarCommand}"
                         SemanticProperties.Description="{Binding TextoBoton}" />
+                    <Button
+                        Style="{StaticResource TextButton}"
+                        Text="¿Ya tienes cuenta? Inicia sesión"
+                        IsVisible="{Binding MostrarIrAInicio}"
+                        Command="{Binding IrAInicioCommand}" />
                     <Button
                         Style="{StaticResource TextButton}"
                         Text="Cancelar"
@@ -170,7 +223,7 @@
                         <Label
                             Style="{StaticResource DialogTitleLabel}"
                             HorizontalTextAlignment="Center"
-                            Text="Registro completado" />
+                            Text="Sesión iniciada" />
                         <Label
                             Style="{StaticResource HintLabel}"
                             HorizontalTextAlignment="Center"
@@ -196,7 +249,7 @@
                         </Grid>
                     </Border>
 
-                    <Label Style="{StaticResource HintLabel}" Text="Paciente activo en este teléfono." />
+                    <Label Style="{StaticResource HintLabel}" Text="Sesión iniciada en este teléfono." />
 
                     <Button
                         Text="Solicitar una cita"
@@ -207,49 +260,8 @@
                         Command="{Binding EditarCommand}" />
                     <Button
                         Style="{StaticResource SecondaryButton}"
-                        Text="Registrar otro paciente"
-                        Command="{Binding OtroCommand}" />
-
-                    <VerticalStackLayout Spacing="8" IsVisible="{Binding MostrarLista}">
-                        <Label Style="{StaticResource SectionLabel}" Text="Pacientes en este teléfono" />
-                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Pacientes}">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate x:DataType="vm:PacienteItem">
-                                    <Border
-                                        Style="{StaticResource CardBorder}"
-                                        MinimumHeightRequest="56"
-                                        SemanticProperties.Description="{Binding Descripcion}">
-                                        <Border.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding CambiarCommand}" />
-                                        </Border.GestureRecognizers>
-                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                                            <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                                                <Label Style="{StaticResource BoldLabel}" FontSize="14" Text="{Binding Nombre}" />
-                                                <Label Style="{StaticResource HintLabel}" Text="{Binding Cedula}" />
-                                            </VerticalStackLayout>
-                                            <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto" ColumnSpacing="6" VerticalOptions="Center" IsVisible="{Binding Activo}">
-                                                <Image
-                                                    Source="ic_check_success"
-                                                    WidthRequest="20"
-                                                    HeightRequest="20"
-                                                    VerticalOptions="Center"
-                                                    AutomationProperties.IsInAccessibleTree="False" />
-                                                <Label Grid.Column="1" Style="{StaticResource BoldLabel}" FontSize="14" VerticalOptions="Center" Text="Activo" />
-                                            </Grid>
-                                            <Image
-                                                Grid.Column="1"
-                                                Source="ic_chevron_muted"
-                                                WidthRequest="20"
-                                                HeightRequest="20"
-                                                VerticalOptions="Center"
-                                                IsVisible="{Binding Inactivo}"
-                                                AutomationProperties.IsInAccessibleTree="False" />
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </VerticalStackLayout>
-                    </VerticalStackLayout>
+                        Text="Cerrar sesión"
+                        Command="{Binding CerrarSesionCommand}" />
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

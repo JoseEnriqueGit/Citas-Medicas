@@ -22,7 +22,7 @@ public class PacienteServiceMultiplePatientsTests : IDisposable
     public void Dispose() => _repo.Dispose();
 
     private static RegistroPaciente Datos(string cedula, string nombre = "María Fernández Peña") =>
-        new(nombre, cedula, "809-555-0142", "maria@correo.com", new DateTime(1991, 3, 14));
+        new(nombre, cedula, "809-555-0142", "maria@correo.com", new DateTime(1991, 3, 14), "clave123");
 
     private Paciente Registrar(string cedula, string nombre = "María Fernández Peña") =>
         _servicio.Registrar(Datos(cedula, nombre)).Paciente!;

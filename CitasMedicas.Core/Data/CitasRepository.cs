@@ -146,6 +146,30 @@ public sealed class CitasRepository : IDisposable
         }
     }
 
+    public Paciente? ObtenerPacientePorCedula(string cedula)
+    {
+        lock (_gate)
+        {
+            return _db.Table<Paciente>().Where(p => p.Cedula == cedula).FirstOrDefault();
+        }
+    }
+
+    public void GuardarContrasena(int id, string hash)
+    {
+        lock (_gate)
+        {
+            _db.Execute("UPDATE Paciente SET ContrasenaHash = ? WHERE Id = ?", hash, id);
+        }
+    }
+
+    public void CerrarSesion()
+    {
+        lock (_gate)
+        {
+            _db.Execute("UPDATE Paciente SET Activo = 0");
+        }
+    }
+
     public Paciente? ObtenerPacienteActivo()
     {
         lock (_gate)

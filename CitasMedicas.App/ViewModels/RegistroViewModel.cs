@@ -16,23 +16,29 @@ public sealed class RegistroViewModel : ObservableObject
     private string _cedula = "";
     private string _telefono = "";
     private string _correo = "";
+    private string _contrasena = "";
     private DateTime? _fecha;
     private bool _editando;
-    private bool _otro;
-    private IReadOnlyList<PacienteItem> _lista = Array.Empty<PacienteItem>();
+    private bool _iniciando;
+    private string _cedulaInicio = "";
+    private string _contrasenaInicio = "";
+    private string _errorInicio = "";
     private IReadOnlyDictionary<CampoPaciente, string> _errores = new Dictionary<CampoPaciente, string>();
 
     public RegistroViewModel(PacienteService pacientes, AppState estado)
     {
         _pacientes = pacientes;
         _estado = estado;
+        _iniciando = estado.Paciente is null && pacientes.Listar().Count > 0;
         _estado.PropertyChanged += (_, _) => NotificarEstado();
-        _estado.DatosCambiaron += Refrescar;
-        _lista = ConstruirLista();
+        _estado.DatosCambiaron += NotificarEstado;
         RegistrarCommand = new Command(() => ErroresUi.Ejecutar(Registrar));
         EditarCommand = new Command(Editar);
         CancelarEdicionCommand = new Command(CancelarEdicion);
-        OtroCommand = new Command(() => ErroresUi.Ejecutar(EntrarOtro));
+        IniciarCommand = new Command(() => ErroresUi.Ejecutar(Iniciar));
+        CerrarSesionCommand = new Command(() => ErroresUi.Ejecutar(CerrarSesion));
+        IrAInicioCommand = new Command(() => CambiarModo(true));
+        IrARegistroCommand = new Command(() => CambiarModo(false));
         SolicitarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(() => Shell.Current.GoToAsync("//solicitar")));
     }
 
@@ -46,19 +52,15 @@ public sealed class RegistroViewModel : ObservableObject
 
     public ICommand SolicitarCommand { get; }
 
-    public ICommand OtroCommand { get; }
+    public ICommand IniciarCommand { get; }
 
-    public IReadOnlyList<PacienteItem> Pacientes
-    {
-        get => _lista;
-        private set => SetProperty(ref _lista, value);
-    }
+    public ICommand CerrarSesionCommand { get; }
 
-    public bool MostrarLista => Completado && _lista.Count >= 2;
+    public ICommand IrAInicioCommand { get; }
 
-    public bool Otro => _otro;
+    public ICommand IrARegistroCommand { get; }
 
-    public bool MostrarCancelar => _editando || _otro;
+    public bool MostrarCancelar => _editando;
 
     public AppState Estado => _estado;
 
@@ -86,6 +88,38 @@ public sealed class RegistroViewModel : ObservableObject
         set => SetProperty(ref _correo, value);
     }
 
+    public string Contrasena
+    {
+        get => _contrasena;
+        set => SetProperty(ref _contrasena, value);
+    }
+
+    public string CedulaInicio
+    {
+        get => _cedulaInicio;
+        set => SetProperty(ref _cedulaInicio, value);
+    }
+
+    public string ContrasenaInicio
+    {
+        get => _contrasenaInicio;
+        set => SetProperty(ref _contrasenaInicio, value);
+    }
+
+    public string ErrorInicio
+    {
+        get => _errorInicio;
+        private set
+        {
+            if (SetProperty(ref _errorInicio, value))
+            {
+                OnPropertyChanged(nameof(HayErrorInicio));
+            }
+        }
+    }
+
+    public bool HayErrorInicio => _errorInicio.Length > 0;
+
     public DateTime? FechaNacimiento
     {
         get => _fecha;
@@ -111,25 +145,33 @@ public sealed class RegistroViewModel : ObservableObject
 
     public string ErrorCorreo => Error(CampoPaciente.Correo);
 
+    public string ErrorContrasena => Error(CampoPaciente.Contrasena);
+
     public string ErrorFecha => Error(CampoPaciente.FechaNacimiento);
 
     public bool HayErrorFecha => ErrorFecha.Length > 0;
 
     public bool HayErrores => _errores.Count > 0;
 
-    public bool MostrarInfo => MostrarFormulario && !HayErrores && !_editando && !_otro;
+    public bool MostrarInfo => MostrarFormulario && !HayErrores && !_editando;
 
     public string ResumenErrores => _errores.Count == 1 ? "Revisa 1 campo" : $"Revisa {_errores.Count} campos";
 
-    public bool Completado => _estado.Paciente is not null && !_editando && !_otro;
+    public bool Completado => _estado.Paciente is not null && !_editando;
 
-    public bool MostrarFormulario => !Completado;
+    public bool MostrarInicio => _estado.Paciente is null && _iniciando;
+
+    public bool MostrarFormulario => !Completado && !MostrarInicio;
+
+    public bool MostrarContrasena => !_editando;
+
+    public bool MostrarIrAInicio => _estado.Paciente is null && !_iniciando;
 
     public bool Editando => _editando;
 
-    public string Titulo => Completado ? "Mi registro" : _editando ? "Editar mis datos" : _otro ? "Registrar otro paciente" : "Registro de paciente";
+    public string Titulo => Completado ? "Mi cuenta" : _editando ? "Editar mis datos" : MostrarInicio ? "Iniciar sesión" : "Registro de paciente";
 
-    public string TextoBoton => _editando ? "Guardar cambios" : _otro ? "Registrar paciente" : "Registrarme";
+    public string TextoBoton => _editando ? "Guardar cambios" : "Registrarme";
 
     public string DatoNombre => _estado.Paciente?.NombreCompleto ?? "";
 
@@ -148,7 +190,7 @@ public sealed class RegistroViewModel : ObservableObject
             return;
         }
 
-        var datos = new RegistroPaciente(_nombre, _cedula, _telefono, _correo, _fecha);
+        var datos = new RegistroPaciente(_nombre, _cedula, _telefono, _correo, _fecha, _contrasena);
         var resultado = _editando && _estado.Paciente is { } actual
             ? _pacientes.Actualizar(actual.Id, datos)
             : _pacientes.Registrar(datos);
@@ -164,10 +206,51 @@ public sealed class RegistroViewModel : ObservableObject
         }
 
         _editando = false;
-        _otro = false;
         _estado.Paciente = resultado.Paciente;
         LimpiarFormulario();
-        Refrescar();
+        NotificarEstado();
+    }
+
+    private void Iniciar()
+    {
+        if (!MostrarInicio)
+        {
+            return;
+        }
+
+        var resultado = _pacientes.IniciarSesion(_cedulaInicio, _contrasenaInicio);
+        ContrasenaInicio = "";
+        if (!resultado.Exitoso)
+        {
+            ErrorInicio = resultado.Error ?? "No se pudo iniciar sesión.";
+            return;
+        }
+
+        ErrorInicio = "";
+        CedulaInicio = "";
+        _estado.Paciente = resultado.Paciente;
+        NotificarEstado();
+    }
+
+    private void CerrarSesion()
+    {
+        _editando = false;
+        _iniciando = true;
+        ErrorInicio = "";
+        LimpiarFormulario();
+        _pacientes.CerrarSesion();
+        NotificarEstado();
+    }
+
+    private void CambiarModo(bool iniciando)
+    {
+        _iniciando = iniciando;
+        _errores = new Dictionary<CampoPaciente, string>();
+        ErrorInicio = "";
+        Contrasena = "";
+        ContrasenaInicio = "";
+        NotificarErrores();
+        NotificarEstado();
     }
 
     private void Editar()
@@ -188,34 +271,9 @@ public sealed class RegistroViewModel : ObservableObject
         NotificarEstado();
     }
 
-    private void EntrarOtro()
-    {
-        _editando = false;
-        _otro = true;
-        _errores = new Dictionary<CampoPaciente, string>();
-        LimpiarFormulario();
-        NotificarErrores();
-        NotificarEstado();
-    }
-
-    private void Refrescar()
-    {
-        Pacientes = ConstruirLista();
-        NotificarEstado();
-    }
-
-    private IReadOnlyList<PacienteItem> ConstruirLista()
-    {
-        var activo = _estado.Paciente?.Id;
-        return _pacientes.Listar().Select(p => new PacienteItem(p, p.Id == activo, Cambiar)).ToList();
-    }
-
-    private void Cambiar(PacienteItem item) => ErroresUi.Ejecutar(() => _pacientes.Activar(item.Paciente.Id));
-
     private void CancelarEdicion()
     {
         _editando = false;
-        _otro = false;
         _errores = new Dictionary<CampoPaciente, string>();
         LimpiarFormulario();
         NotificarErrores();
@@ -228,6 +286,7 @@ public sealed class RegistroViewModel : ObservableObject
         Cedula = "";
         Telefono = "";
         Correo = "";
+        Contrasena = "";
         FechaNacimiento = null;
     }
 
@@ -239,6 +298,7 @@ public sealed class RegistroViewModel : ObservableObject
         OnPropertyChanged(nameof(ErrorCedula));
         OnPropertyChanged(nameof(ErrorTelefono));
         OnPropertyChanged(nameof(ErrorCorreo));
+        OnPropertyChanged(nameof(ErrorContrasena));
         OnPropertyChanged(nameof(ErrorFecha));
         OnPropertyChanged(nameof(HayErrorFecha));
         OnPropertyChanged(nameof(HayErrores));
@@ -249,11 +309,12 @@ public sealed class RegistroViewModel : ObservableObject
     private void NotificarEstado()
     {
         OnPropertyChanged(nameof(Completado));
+        OnPropertyChanged(nameof(MostrarInicio));
         OnPropertyChanged(nameof(MostrarFormulario));
+        OnPropertyChanged(nameof(MostrarContrasena));
+        OnPropertyChanged(nameof(MostrarIrAInicio));
         OnPropertyChanged(nameof(Editando));
-        OnPropertyChanged(nameof(Otro));
         OnPropertyChanged(nameof(MostrarCancelar));
-        OnPropertyChanged(nameof(MostrarLista));
         OnPropertyChanged(nameof(Titulo));
         OnPropertyChanged(nameof(TextoBoton));
         OnPropertyChanged(nameof(MostrarInfo));

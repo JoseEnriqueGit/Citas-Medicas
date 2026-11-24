@@ -65,6 +65,7 @@ public partial class RegistroPage : ContentPage
             CampoPaciente.Cedula => CampoCedula,
             CampoPaciente.Telefono => CampoTelefono,
             CampoPaciente.Correo => CampoCorreo,
+            CampoPaciente.Contrasena => CampoContrasena,
             _ => null
         };
 

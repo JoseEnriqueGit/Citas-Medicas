@@ -28,6 +28,9 @@ public partial class FormField : ContentView
     public static readonly BindableProperty KeyboardProperty =
         BindableProperty.Create(nameof(Keyboard), typeof(Keyboard), typeof(FormField), Keyboard.Default);
 
+    public static readonly BindableProperty IsPasswordProperty =
+        BindableProperty.Create(nameof(IsPassword), typeof(bool), typeof(FormField), false);
+
     public static readonly BindableProperty MaxLengthProperty =
         BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(FormField), int.MaxValue);
 
@@ -77,6 +80,12 @@ public partial class FormField : ContentView
     {
         get => (Keyboard)GetValue(KeyboardProperty);
         set => SetValue(KeyboardProperty, value);
+    }
+
+    public bool IsPassword
+    {
+        get => (bool)GetValue(IsPasswordProperty);
+        set => SetValue(IsPasswordProperty, value);
     }
 
     public int MaxLength

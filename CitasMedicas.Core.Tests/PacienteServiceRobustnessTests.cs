@@ -16,7 +16,7 @@ public class PacienteServiceRobustnessTests : IDisposable
     public void Dispose() => _repo.Dispose();
 
     private static RegistroPaciente Valido(string cedula = "001-1234567-8") => new(
-        "María Fernández Peña", cedula, "809-555-0142", "maria@correo.com", new DateTime(1991, 3, 14));
+        "María Fernández Peña", cedula, "809-555-0142", "maria@correo.com", new DateTime(1991, 3, 14), "clave123");
 
     [Theory]
     [InlineData("٠٠١-١٢٣٤٥٦٧-٨")]
