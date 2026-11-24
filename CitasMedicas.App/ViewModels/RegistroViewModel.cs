@@ -25,10 +25,10 @@ public sealed class RegistroViewModel : ObservableObject
         _pacientes = pacientes;
         _estado = estado;
         _estado.PropertyChanged += (_, _) => NotificarEstado();
-        RegistrarCommand = new Command(Registrar);
+        RegistrarCommand = new Command(() => ErroresUi.Ejecutar(Registrar));
         EditarCommand = new Command(Editar);
         CancelarEdicionCommand = new Command(CancelarEdicion);
-        SolicitarCommand = new Command(async () => await Shell.Current.GoToAsync("//solicitar"));
+        SolicitarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(() => Shell.Current.GoToAsync("//solicitar")));
     }
 
     public event Action<CampoPaciente>? FocoSolicitado;
@@ -124,6 +124,11 @@ public sealed class RegistroViewModel : ObservableObject
 
     public void Registrar()
     {
+        if (!MostrarFormulario)
+        {
+            return;
+        }
+
         var datos = new RegistroPaciente(_nombre, _cedula, _telefono, _correo, _fecha);
         var resultado = _editando && _estado.Paciente is { } actual
             ? _pacientes.Actualizar(actual.Id, datos)

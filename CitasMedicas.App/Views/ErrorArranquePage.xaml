@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CitasMedicas.App.Views.ErrorArranquePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="No se pudo abrir">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16" VerticalOptions="Center">
+            <Border
+                WidthRequest="72"
+                HeightRequest="72"
+                HorizontalOptions="Center"
+                BackgroundColor="{StaticResource DangerTint}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 36">
+                <Image
+                    Source="ic_alert_danger"
+                    WidthRequest="40"
+                    HeightRequest="40"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    AutomationProperties.IsInAccessibleTree="False" />
+            </Border>
+            <Label
+                Style="{StaticResource DialogTitleLabel}"
+                HorizontalTextAlignment="Center"
+                Text="No se pudieron abrir tus datos" />
+            <Label
+                Style="{StaticResource HintLabel}"
+                HorizontalTextAlignment="Center"
+                Text="El archivo donde se guardan las citas no se puede leer. Puedes reintentar o empezar de cero." />
+            <Label
+                x:Name="MensajeLabel"
+                Style="{StaticResource BannerErrorText}"
+                IsVisible="False"
+                HorizontalTextAlignment="Center" />
+            <Button
+                x:Name="ReintentarBoton"
+                Text="Reintentar"
+                SemanticProperties.Description="Reintentar abrir los datos"
+                Clicked="OnReintentar" />
+            <Button
+                x:Name="RestablecerBoton"
+                Style="{StaticResource SecondaryButton}"
+                Text="Empezar de cero"
+                SemanticProperties.Description="Empezar de cero. Se conserva una copia del archivo dañado"
+                Clicked="OnRestablecer" />
+            <Label
+                Style="{StaticResource CaptionLabel}"
+                HorizontalTextAlignment="Center"
+                Text="Empezar de cero guarda una copia del archivo dañado y crea una base nueva." />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

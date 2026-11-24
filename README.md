@@ -42,6 +42,8 @@ dotnet build CitasMedicas.App -t:Run -f net10.0-android
 
 Con el emulador abierto, la app se instala y se lanza sola. Si no queda en primer plano: `adb shell am start -n com.citasmedicas.app/crc6452d1be0e8d06e841.MainActivity`.
 
+Si el archivo de datos se daña, la app muestra una pantalla con «Reintentar» y «Empezar de cero»; esta última aparta el archivo como `citas.db3.corrupta-<fecha>` y crea una base nueva.
+
 Los builds de depuración usan Fast Deployment: no borres los datos con `adb shell pm clear` (el arranque aborta). Para empezar de cero usa `adb uninstall com.citasmedicas.app` y vuelve a ejecutar.
 
 ## Verificación

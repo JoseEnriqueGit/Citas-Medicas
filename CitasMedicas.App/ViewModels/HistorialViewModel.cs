@@ -39,7 +39,7 @@ public sealed class HistorialViewModel : ObservableObject
             }
         };
         AccionVaciaCommand = new Command(AccionVacia);
-        RegistrarseCommand = new Command(async () => await Shell.Current.GoToAsync("//paciente"));
+        RegistrarseCommand = new Command(() => _ = ErroresUi.EjecutarAsync(() => Shell.Current.GoToAsync("//paciente")));
     }
 
     public event Action? AvisoMostrado;
@@ -148,7 +148,9 @@ public sealed class HistorialViewModel : ObservableObject
         OnPropertyChanged(nameof(VacioAccion));
     }
 
-    private async void Cancelar(HistorialItem item)
+    private void Cancelar(HistorialItem item) => _ = ErroresUi.EjecutarAsync(() => CancelarAsync(item));
+
+    private async Task CancelarAsync(HistorialItem item)
     {
         if (_ocupado)
         {

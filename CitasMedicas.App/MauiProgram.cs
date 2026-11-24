@@ -23,7 +23,7 @@ public static class MauiProgram
 				Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent));
 #endif
 
-		builder.Services.AddSingleton(_ => new CitasRepository(Path.Combine(FileSystem.AppDataDirectory, "citas.db3")));
+		builder.Services.AddSingleton(_ => new CitasRepository(RutaBaseDatos.Actual));
 		builder.Services.AddSingleton(TimeProvider.System);
 		builder.Services.AddSingleton<HorarioService>();
 		builder.Services.AddSingleton<PacienteService>();

@@ -20,6 +20,13 @@ public partial class CancelarCitaPage : ContentPage
         return await pagina._resultado.Task;
     }
 
+    protected override void OnDisappearing()
+    {
+        _cerrando = true;
+        _resultado.TrySetResult(false);
+        base.OnDisappearing();
+    }
+
     protected override bool OnBackButtonPressed()
     {
         _ = CerrarAsync(false);

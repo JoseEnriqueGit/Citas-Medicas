@@ -30,19 +30,25 @@ public sealed class SolicitarViewModel : ObservableObject
         _horarios = horarios;
         _repositorio = repositorio;
         _estado = estado;
-        RevisarCommand = new Command(async () => await RevisarAsync());
+        RevisarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(RevisarAsync));
         CambiarMedicoCommand = new Command(() =>
         {
             _cambiandoMedico = true;
             NotificarMedico();
         });
         NuevaCommand = new Command(Reiniciar);
-        HistorialCommand = new Command(async () =>
+        HistorialCommand = new Command(() => _ = ErroresUi.EjecutarAsync(async () =>
         {
-            await Shell.Current.GoToAsync("//historial");
-            Reiniciar();
-        });
-        IrAPacienteCommand = new Command(async () => await Shell.Current.GoToAsync("//paciente"));
+            try
+            {
+                await Shell.Current.GoToAsync("//historial");
+            }
+            finally
+            {
+                Reiniciar();
+            }
+        }));
+        IrAPacienteCommand = new Command(() => _ = ErroresUi.EjecutarAsync(() => Shell.Current.GoToAsync("//paciente")));
     }
 
     public event Action<int>? FechaVisible;
@@ -298,7 +304,7 @@ public sealed class SolicitarViewModel : ObservableObject
 
     private async Task RevisarAsync()
     {
-        if (_ocupado)
+        if (_ocupado || _datosProgramada is not null)
         {
             return;
         }
