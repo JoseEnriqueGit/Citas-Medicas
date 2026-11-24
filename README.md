@@ -12,8 +12,9 @@ Hay 18 capturas de todas las pantallas y estados en [`docs/capturas`](docs/captu
 
 ## Funcionalidades
 
-- **Registro de pacientes**: nombre, cédula única (`000-0000000-0`), teléfono de 10 dígitos, correo opcional y fecha de nacimiento. Todos los errores se muestran a la vez; una cédula repetida no guarda nada. El paciente puede editar sus datos.
-- **Listado de médicos**: 9 médicos de ejemplo con especialidad y centro, búsqueda por nombre o especialidad combinable con el filtro por especialidad, y el próximo horario libre de cada uno.
+- **Registro de pacientes**: nombre, cédula única (`000-0000000-0`), teléfono de 10 dígitos, correo opcional y fecha de nacimiento. Todos los errores se muestran a la vez; una cédula repetida no guarda nada. El paciente puede editar sus datos. Se pueden registrar más pacientes en el mismo teléfono y cambiar el paciente activo; cada uno ve solo su historial.
+- **Listado de médicos**: 9 médicos de ejemplo con especialidad y centro, búsqueda por nombre o especialidad combinable con el filtro por especialidad, y el próximo horario libre de cada uno. Se pueden registrar médicos nuevos (nombre, especialidad y centro, sin duplicados).
+- **Tiempo real**: al registrar un paciente, cambiar de paciente o registrar un médico, todas las pantallas se actualizan al instante, sin reiniciar la aplicación ni cambiar de pestaña.
 - **Consulta de fechas y horarios**: bloques de 30 minutos de 08:00 a 16:00, de lunes a viernes. Los ocupados se calculan a partir de las citas programadas; un día lleno ofrece ir al próximo día con hueco.
 - **Solicitud de citas**: médico, fecha, horario y motivo (máximo 200 caracteres), con una confirmación previa. La disponibilidad se revisa de nuevo al confirmar: si el horario ya fue tomado, no se guarda nada y se conservan los datos escritos.
 - **Historial de citas**: la más reciente primero, con filtro por estado (Programada, Completada, Cancelada). Solo las programadas se cancelan, con confirmación, y el horario queda libre.
@@ -26,7 +27,7 @@ CitasMedicas.App   ── vistas XAML, ViewModels, controles, navegación Shell 
         │
 CitasMedicas.Core  ── modelos, repositorio SQLite y servicios con las reglas de negocio
         │
-CitasMedicas.Core.Tests ── 119 pruebas xUnit sobre el núcleo
+CitasMedicas.Core.Tests ── 152 pruebas xUnit sobre el núcleo
 ```
 
 - Las reglas de negocio viven en `CitasMedicas.Core`, sin dependencias de MAUI, y se prueban allí; la interfaz solo las llama.
@@ -50,13 +51,14 @@ Los builds de depuración usan Fast Deployment: no borres los datos con `adb she
 
 ## Pruebas
 
-`dotnet test CitasMedicas.Core.Tests` ejecuta 119 pruebas:
+`dotnet test CitasMedicas.Core.Tests` ejecuta 152 pruebas:
 
 | Área | Pruebas |
 | --- | --- |
 | Repositorio SQLite (datos iniciales, duplicados, concurrencia, archivo corrupto) | 19 |
 | Horarios (bloques, días hábiles, ocupados, próximo libre) | 23 |
-| Pacientes (validación, cédula única, actualización) | 43 |
+| Pacientes (validación, cédula única, actualización, varios pacientes y cambio del activo) | 58 |
+| Médicos (registro, duplicados, especialidades, avisos de cambio) | 18 |
 | Citas (solicitud, duplicados, pasado, cancelación, historial) | 34 |
 
 Incluyen los caminos de fallo: datos inválidos, límites de tiempo, 20 solicitudes simultáneas al mismo horario (gana una sola), reapertura de la base y archivos dañados.
@@ -69,9 +71,9 @@ La interfaz se verificó en el emulador por `adb`, con capturas en [`evidence`](
 | --- | --- |
 | [`docs/entrega`](docs/entrega) | Conclusiones, Bibliografía y Anexos del trabajo (Word y PDF) y el guion de exposición |
 | [`docs/capturas`](docs/capturas) | Capturas de todas las pantallas y estados |
-| [`design`](design) | Diseño de las 5 pantallas y sistema de diseño |
+| [`design`](design) | Diseño de las pantallas y sus estados (incluye registrar otro paciente y registrar médico) y sistema de diseño |
 | [`odd/tasks/citas-medicas.md`](odd/tasks/citas-medicas.md) | Especificación, tareas y registro del desarrollo |
 
 ## Alcance
 
-Esta primera versión funciona en un solo teléfono, sin servidor. No incluye inicio de sesión ni contraseñas, reprogramación de citas, horarios distintos por médico ni una acción en pantalla para marcar una cita como completada. Los nueve médicos son datos de ejemplo. Se probó en un emulador Android, no en dispositivos físicos. El detalle está en los anexos A y B de [`docs/entrega`](docs/entrega).
+Esta primera versión funciona en un solo teléfono, sin servidor. No incluye inicio de sesión ni contraseñas, reprogramación de citas, horarios distintos por médico ni una acción en pantalla para marcar una cita como completada. Los nueve médicos iniciales son datos de ejemplo; se pueden registrar más, pero no editar ni eliminar. Los pacientes tampoco se pueden eliminar. Se probó en un emulador Android, no en dispositivos físicos. El detalle está en los anexos A y B de [`docs/entrega`](docs/entrega).
