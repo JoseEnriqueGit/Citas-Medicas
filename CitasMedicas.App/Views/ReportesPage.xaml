@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CitasMedicas.App.Views.ReportesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:CitasMedicas.App.Controls"
+    xmlns:vm="clr-namespace:CitasMedicas.App.ViewModels"
+    x:DataType="vm:ReporteViewModel"
+    Title="Reportes">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Border
+            BackgroundColor="{StaticResource Surface}"
+            StrokeShape="Rectangle"
+            StrokeThickness="0"
+            Padding="0">
+            <VerticalStackLayout>
+                <VerticalStackLayout Padding="16,12,16,12">
+                    <Label
+                        Style="{StaticResource TitleLabel}"
+                        Text="Reportes"
+                        SemanticProperties.HeadingLevel="Level1" />
+                    <Label
+                        FontSize="14"
+                        TextColor="{StaticResource Muted}"
+                        Text="Informes administrativos" />
+                </VerticalStackLayout>
+                <BoxView HeightRequest="1" Color="{StaticResource Divider}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+                <VerticalStackLayout Spacing="8">
+                    <ScrollView
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never"
+                        SemanticProperties.Description="Período del reporte">
+                        <HorizontalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Periodos}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:EspecialidadItem">
+                                    <controls:ChipView
+                                        Text="{Binding Nombre}"
+                                        IsSelected="{Binding Seleccionada}"
+                                        Command="{Binding ElegirCommand}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+                    </ScrollView>
+                    <Label FontAttributes="Bold" Text="{Binding Rango}" />
+                    <Label Style="{StaticResource HintLabel}" Text="{Binding Generado}" />
+                </VerticalStackLayout>
+
+                <Border Style="{StaticResource BannerInfo}" IsVisible="{Binding SinCitas}" SemanticProperties.Description="No hay citas en este período.">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Image
+                            Source="ic_info_primary"
+                            WidthRequest="20"
+                            HeightRequest="20"
+                            VerticalOptions="Start"
+                            AutomationProperties.IsInAccessibleTree="False" />
+                        <Label Grid.Column="1" Style="{StaticResource BannerInfoText}" Text="No hay citas en este período." FontAttributes="Bold" />
+                    </Grid>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
+                    <Border Style="{StaticResource CardBorder}" SemanticProperties.Description="{Binding Total, StringFormat='Citas: {0}'}">
+                        <VerticalStackLayout>
+                            <Label FontSize="28" FontAttributes="Bold" Text="{Binding Total}" />
+                            <Label Style="{StaticResource HintLabel}" Text="Citas" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardBorder}" SemanticProperties.Description="{Binding Programadas, StringFormat='Programadas: {0}'}">
+                        <VerticalStackLayout>
+                            <Label FontSize="28" FontAttributes="Bold" Text="{Binding Programadas}" />
+                            <Label Style="{StaticResource HintLabel}" Text="Programadas" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Row="1" Style="{StaticResource CardBorder}" SemanticProperties.Description="{Binding Completadas, StringFormat='Completadas: {0}'}">
+                        <VerticalStackLayout>
+                            <Label FontSize="28" FontAttributes="Bold" Text="{Binding Completadas}" />
+                            <Label Style="{StaticResource HintLabel}" Text="Completadas" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CardBorder}" SemanticProperties.Description="{Binding Canceladas, StringFormat='Canceladas: {0}'}">
+                        <VerticalStackLayout>
+                            <Label FontSize="28" FontAttributes="Bold" Text="{Binding Canceladas}" />
+                            <Label Style="{StaticResource HintLabel}" Text="Canceladas" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+                <Label FontAttributes="Bold" Text="{Binding Tasa}" />
+
+                <Label Style="{StaticResource SectionLabel}" Text="Citas por médico" />
+                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding PorMedico}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ReporteMedicoItem">
+                            <Border Style="{StaticResource CardBorder}" SemanticProperties.Description="{Binding Descripcion}">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold" />
+                                        <Label Style="{StaticResource HintLabel}" Text="{Binding Detalle}" />
+                                        <Label Style="{StaticResource CaptionLabel}" Text="{Binding Resumen}" />
+                                    </VerticalStackLayout>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="20"
+                                        FontAttributes="Bold"
+                                        VerticalOptions="Center"
+                                        Text="{Binding Total}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Label Style="{StaticResource SectionLabel}" Text="Citas por especialidad" />
+                <Label Style="{StaticResource HintLabel}" Text="Sin citas en este período." IsVisible="{Binding SinEspecialidades}" />
+                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding PorEspecialidad}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ReporteEspecialidadItem">
+                            <Border Style="{StaticResource CardBorder}" SemanticProperties.Description="{Binding Descripcion}">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                    <Label Text="{Binding Nombre}" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" FontAttributes="Bold" Text="{Binding Total}" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Label Style="{StaticResource SectionLabel}" Text="Resumen general" />
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" SemanticProperties.Description="{Binding Pacientes, StringFormat='Pacientes registrados: {0}'}">
+                            <Label Text="Pacientes registrados" />
+                            <Label Grid.Column="1" FontAttributes="Bold" Text="{Binding Pacientes}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" SemanticProperties.Description="{Binding Medicos, StringFormat='Médicos registrados: {0}'}">
+                            <Label Text="Médicos registrados" />
+                            <Label Grid.Column="1" FontAttributes="Bold" Text="{Binding Medicos}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border
+            Grid.Row="2"
+            BackgroundColor="{StaticResource Surface}"
+            StrokeShape="Rectangle"
+            StrokeThickness="0"
+            Padding="0">
+            <VerticalStackLayout>
+                <BoxView HeightRequest="1" Color="{StaticResource Divider}" />
+                <VerticalStackLayout Padding="16,12" Spacing="4">
+                    <Button
+                        Text="Exportar CSV"
+                        Command="{Binding ExportarCommand}"
+                        SemanticProperties.Description="Exportar reporte a CSV" />
+                    <Button
+                        Style="{StaticResource TextButton}"
+                        Text="Cerrar"
+                        Command="{Binding CerrarCommand}"
+                        SemanticProperties.Description="Cerrar reportes" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

@@ -15,8 +15,11 @@ public sealed class MedicosViewModel : ObservableObject
     private readonly CitasRepository _repositorio;
     private readonly HorarioService _horarios;
     private readonly MedicoService _medicosServicio;
+    private readonly ReporteService _reportes;
+    private readonly TimeProvider _reloj;
     private readonly AppState _estado;
     private bool _abriendo;
+    private bool _abriendoReportes;
     private bool _avisoVisible;
     private string _textoAviso = "";
     private int _versionAviso;
@@ -26,11 +29,13 @@ public sealed class MedicosViewModel : ObservableObject
     private string _busqueda = "";
     private string? _especialidad;
 
-    public MedicosViewModel(CitasRepository repositorio, HorarioService horarios, MedicoService medicosServicio, AppState estado)
+    public MedicosViewModel(CitasRepository repositorio, HorarioService horarios, MedicoService medicosServicio, ReporteService reportes, TimeProvider reloj, AppState estado)
     {
         _repositorio = repositorio;
         _horarios = horarios;
         _medicosServicio = medicosServicio;
+        _reportes = reportes;
+        _reloj = reloj;
         _estado = estado;
         _estado.MedicosCambiaron += Cargar;
         _estado.PropertyChanged += (_, e) =>
@@ -43,13 +48,18 @@ public sealed class MedicosViewModel : ObservableObject
         LimpiarCommand = new Command(Limpiar);
         RegistrarseCommand = new Command(async () => await Shell.Current.GoToAsync("//paciente"));
         AgregarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(AgregarAsync));
+        ReportesCommand = new Command(() => _ = ErroresUi.EjecutarAsync(AbrirReportesInternoAsync));
     }
 
     public event Action<string>? AvisoMostrado;
 
     public Func<RegistroMedicoViewModel, Task<Medico?>>? RegistrarAsync { get; set; }
 
+    public Func<ReporteViewModel, Task>? AbrirReportesAsync { get; set; }
+
     public ICommand AgregarCommand { get; }
+
+    public ICommand ReportesCommand { get; }
 
     public bool AvisoVisible
     {
@@ -179,6 +189,24 @@ public sealed class MedicosViewModel : ObservableObject
         if (medico is not null)
         {
             await MostrarAvisoAsync(medico.Nombre);
+        }
+    }
+
+    private async Task AbrirReportesInternoAsync()
+    {
+        if (_abriendoReportes || AbrirReportesAsync is null)
+        {
+            return;
+        }
+
+        _abriendoReportes = true;
+        try
+        {
+            await AbrirReportesAsync(new ReporteViewModel(_reportes, _reloj));
+        }
+        finally
+        {
+            _abriendoReportes = false;
         }
     }
 

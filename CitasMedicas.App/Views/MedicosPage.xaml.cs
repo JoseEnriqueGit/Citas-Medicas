@@ -11,6 +11,7 @@ public partial class MedicosPage : ContentPage
         InitializeComponent();
         BindingContext = _vm = vm;
         _vm.RegistrarAsync = formulario => RegistroMedicoPage.MostrarAsync(Navigation, formulario);
+        _vm.AbrirReportesAsync = reporte => ReportesPage.MostrarAsync(Navigation, reporte);
         _vm.AvisoMostrado += SemanticScreenReader.Announce;
     }
 

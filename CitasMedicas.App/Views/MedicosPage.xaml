@@ -52,13 +52,23 @@
                 </Grid>
             </Border>
 
-            <Button
-                Style="{StaticResource SecondaryButton}"
-                Text="Agregar médico"
-                ImageSource="ic_plus_primary"
-                ContentLayout="Left,8"
-                Command="{Binding AgregarCommand}"
-                SemanticProperties.Description="Agregar médico" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                <Button
+                    Style="{StaticResource SecondaryButton}"
+                    Text="Agregar médico"
+                    ImageSource="ic_plus_primary"
+                    ContentLayout="Left,8"
+                    Command="{Binding AgregarCommand}"
+                    SemanticProperties.Description="Agregar médico" />
+                <Button
+                    Grid.Column="1"
+                    Style="{StaticResource SecondaryButton}"
+                    Text="Reportes"
+                    ImageSource="ic_report_primary"
+                    ContentLayout="Left,8"
+                    Command="{Binding ReportesCommand}"
+                    SemanticProperties.Description="Abrir reportes" />
+            </Grid>
 
             <VerticalStackLayout Spacing="4">
                 <Label Style="{StaticResource FieldLabel}" Text="Buscar médico" />

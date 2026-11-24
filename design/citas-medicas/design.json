@@ -8,6 +8,7 @@
     { "file": "03-horarios.html", "title": "Consulta de fechas y horarios", "tradeoff": "Rejilla de bloques de 30 minutos; muestra todo el día de un vistazo a costa de 16 botones", "width": 1320, "height": 1140 },
     { "file": "04-solicitar-cita.html", "title": "Solicitar cita", "tradeoff": "Una pantalla de cuatro pasos visibles; evita navegar entre pantallas pero es más larga", "width": 1720, "height": 1140 },
     { "file": "05-historial.html", "title": "Historial de citas", "tradeoff": "Tarjetas con estado en texto e icono y cancelación en la propia tarjeta; más densas que una tabla", "width": 1320, "height": 1140 },
-    { "file": "07-registrar-medico.html", "title": "Registrar médico", "tradeoff": "Formulario modal abierto desde Médicos en vez de una pestaña nueva; mantiene cinco pestañas pero separa la tarea del listado", "width": 1320, "height": 1140 }
+    { "file": "07-registrar-medico.html", "title": "Registrar médico", "tradeoff": "Formulario modal abierto desde Médicos en vez de una pestaña nueva; mantiene cinco pestañas pero separa la tarea del listado", "width": 1320, "height": 1140 },
+    { "file": "08-reportes.html", "title": "Reportes", "tradeoff": "Página modal con filtros de período y barra de exportación fija; separa los informes del listado a costa de una pantalla más larga que se desplaza", "width": 1320, "height": 1140 }
   ]
 }
