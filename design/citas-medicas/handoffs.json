@@ -9,7 +9,7 @@
       "startedAt": "2026-11-24T20:05:03.748Z",
       "implementedAt": "2026-11-24T20:16:12.129Z",
       "feature": "odd/tasks/citas-medicas.md",
-      "note": "Registro implementado en MAUI: formulario con 5 campos, errores simultáneos, estado completado y edición; verificado en emulador (capturas en evidence/)."
+      "note": "Registro de pacientes implementado en MAUI: formulario, errores simultáneos, estado completado y edición; además registrar otro paciente, lista de pacientes y cambio del paciente activo en tiempo real (evidence/, evidence/t12-pac-*)."
     },
     "02-medicos.html": {
       "status": "implemented",
@@ -18,7 +18,7 @@
       "startedAt": null,
       "implementedAt": "2026-11-24T20:24:15.176Z",
       "feature": "odd/tasks/citas-medicas.md",
-      "note": "Médicos implementado: búsqueda + chips combinables, próximo horario libre, estado sin resultados; verificado en emulador (evidence/t6-*)."
+      "note": "Médicos implementado: búsqueda y chips combinables, próximo horario libre, estado sin resultados, botón Agregar médico y aviso de médico registrado (evidence/t6-*, evidence/t12-med-*)."
     },
     "03-horarios.html": {
       "status": "implemented",
@@ -46,15 +46,6 @@
       "implementedAt": "2026-11-24T20:38:41.712Z",
       "feature": "odd/tasks/citas-medicas.md",
       "note": "Historial implementado: chips de estado, tarjetas con icono+texto, cancelación con diálogo modal y aviso de 3 s, estados vacíos; verificado en emulador (evidence/t8-*)."
-    },
-    "06-pacientes.html": {
-      "status": "implemented",
-      "queued": false,
-      "sentAt": "2026-11-24T22:51:55.006Z",
-      "startedAt": null,
-      "implementedAt": "2026-11-24T22:52:00.451Z",
-      "feature": "odd/tasks/citas-medicas.md",
-      "note": "Ya implementado en la app: registrar otro paciente, lista Pacientes en este teléfono y cambio de paciente activo con actualización en tiempo real (evidence/t12-pac-*)."
     },
     "07-registrar-medico.html": {
       "status": "implemented",

@@ -3,12 +3,11 @@
   "brief": "Aplicación móvil Android (.NET MAUI) para administrar citas entre pacientes y centros médicos: registro de pacientes, listado de médicos, consulta de fechas y horarios, solicitud de citas e historial. Una sola dirección visual con cada pantalla en sus estados clave.",
   "feature": "odd/tasks/citas-medicas.md",
   "artboards": [
-    { "file": "01-registro.html", "title": "Registro de paciente", "tradeoff": "Formulario único con validación completa a la vez; más largo, sin pasos intermedios", "width": 1320, "height": 1140 },
-    { "file": "02-medicos.html", "title": "Listado de médicos", "tradeoff": "Tarjetas con próximo horario libre; más altas que una lista simple pero responden la pregunta clave", "width": 1320, "height": 1140 },
+    { "file": "01-registro.html", "title": "Registro de pacientes", "tradeoff": "Formulario único con validación completa a la vez; registrar otro paciente y cambiar de paciente viven en la misma pestaña, sin pantalla aparte, a costa de alargarla", "width": 2140, "height": 1140 },
+    { "file": "02-medicos.html", "title": "Listado de médicos", "tradeoff": "Tarjetas con próximo horario libre; más altas que una lista simple pero responden la pregunta clave", "width": 1720, "height": 1140 },
     { "file": "03-horarios.html", "title": "Consulta de fechas y horarios", "tradeoff": "Rejilla de bloques de 30 minutos; muestra todo el día de un vistazo a costa de 16 botones", "width": 1320, "height": 1140 },
     { "file": "04-solicitar-cita.html", "title": "Solicitar cita", "tradeoff": "Una pantalla de cuatro pasos visibles; evita navegar entre pantallas pero es más larga", "width": 1720, "height": 1140 },
     { "file": "05-historial.html", "title": "Historial de citas", "tradeoff": "Tarjetas con estado en texto e icono y cancelación en la propia tarjeta; más densas que una tabla", "width": 1320, "height": 1140 },
-    { "file": "06-pacientes.html", "title": "Registrar otro paciente y cambiar de paciente", "tradeoff": "Lista de pacientes dentro de la pestaña Paciente, sin pantalla aparte; evita otra pestaña pero alarga esa pantalla", "width": 1720, "height": 1140 },
-    { "file": "07-registrar-medico.html", "title": "Registrar médico", "tradeoff": "Formulario modal abierto desde Médicos en vez de una pestaña nueva; mantiene cinco pestañas pero separa la tarea del listado", "width": 1720, "height": 1140 }
+    { "file": "07-registrar-medico.html", "title": "Registrar médico", "tradeoff": "Formulario modal abierto desde Médicos en vez de una pestaña nueva; mantiene cinco pestañas pero separa la tarea del listado", "width": 1320, "height": 1140 }
   ]
 }
