@@ -73,6 +73,9 @@ Sistema inicial **propuesto**: el proyecto no tenía fuentes de diseño (ni CSS,
 - **Aviso**: info, error, advertencia y éxito, con icono y texto; los de error usan `role=alert`.
 - **Diálogo**: título, descripción corta, datos clave y dos acciones; la destructiva en danger, la segura a la izquierda.
 - **Estados vacíos**: qué va aquí y una acción; con una consulta sin resultados se cita la consulta y se ofrece limpiarla.
+- **Fila de paciente**: tarjeta tocable de 56 px mínimo con nombre y cédula; activo = check success + texto «Activo», no activo = chevron muted; nunca solo color.
+- **Botón de acción de lista**: secundario con icono + a la izquierda (8 px), encima del buscador; abre un formulario modal.
+- **Chips de sugerencia**: mismos chips que el filtro, pero al tocarlos rellenan el campo de texto; se marcan cuando el texto coincide.
 
 ## Mapeo a MAUI
 
