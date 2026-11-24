@@ -1,11 +1,28 @@
 {
   "version": 1,
-  "chosen": "01-registro.html",
+  "chosen": "03-horarios.html",
   "handoffs": {
     "01-registro.html": {
-      "status": "sent",
+      "status": "implemented",
       "queued": false,
       "sentAt": "2026-11-24T20:04:22.038Z",
+      "startedAt": "2026-11-24T20:05:03.748Z",
+      "implementedAt": "2026-11-24T20:16:12.129Z",
+      "feature": "odd/tasks/citas-medicas.md",
+      "note": "Registro implementado en MAUI: formulario con 5 campos, errores simultáneos, estado completado y edición; verificado en emulador (capturas en evidence/)."
+    },
+    "02-medicos.html": {
+      "status": "sent",
+      "queued": false,
+      "sentAt": "2026-11-24T20:16:12.135Z",
+      "startedAt": null,
+      "implementedAt": null,
+      "feature": "odd/tasks/citas-medicas.md"
+    },
+    "03-horarios.html": {
+      "status": "sent",
+      "queued": false,
+      "sentAt": "2026-11-24T20:16:12.148Z",
       "startedAt": null,
       "implementedAt": null,
       "feature": "odd/tasks/citas-medicas.md"

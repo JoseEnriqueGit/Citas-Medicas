@@ -1,3 +1,4 @@
+using CitasMedicas.App.ViewModels;
 using CitasMedicas.App.Services;
 using CitasMedicas.App.Views;
 using CitasMedicas.Core.Data;
@@ -13,6 +14,15 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder.UseMauiApp<App>();
 
+#if ANDROID
+		Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("SinSubrayado", (handler, _) =>
+			handler.PlatformView.BackgroundTintList =
+				Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent));
+		Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("SinSubrayado", (handler, _) =>
+			handler.PlatformView.BackgroundTintList =
+				Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent));
+#endif
+
 		builder.Services.AddSingleton(_ => new CitasRepository(Path.Combine(FileSystem.AppDataDirectory, "citas.db3")));
 		builder.Services.AddSingleton(TimeProvider.System);
 		builder.Services.AddSingleton<HorarioService>();
@@ -20,6 +30,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<CitaService>();
 		builder.Services.AddSingleton<AppState>();
 
+		builder.Services.AddSingleton<RegistroViewModel>();
 		builder.Services.AddTransient<RegistroPage>();
 		builder.Services.AddTransient<MedicosPage>();
 		builder.Services.AddTransient<HorariosPage>();

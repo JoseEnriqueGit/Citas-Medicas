@@ -13,35 +13,35 @@
     <TabBar>
         <ShellContent
             Title="Paciente"
-            Icon="tab_paciente_unsel"
+            Icon="tab_paciente"
             Route="paciente"
             AutomationId="tab_paciente"
             SemanticProperties.Description="Pestaña Paciente"
             ContentTemplate="{DataTemplate views:RegistroPage}" />
         <ShellContent
             Title="Médicos"
-            Icon="tab_medicos_unsel"
+            Icon="tab_medicos"
             Route="medicos"
             AutomationId="tab_medicos"
             SemanticProperties.Description="Pestaña Médicos"
             ContentTemplate="{DataTemplate views:MedicosPage}" />
         <ShellContent
             Title="Horarios"
-            Icon="tab_horarios_unsel"
+            Icon="tab_horarios"
             Route="horarios"
             AutomationId="tab_horarios"
             SemanticProperties.Description="Pestaña Horarios"
             ContentTemplate="{DataTemplate views:HorariosPage}" />
         <ShellContent
             Title="Solicitar"
-            Icon="tab_solicitar_unsel"
+            Icon="tab_solicitar"
             Route="solicitar"
             AutomationId="tab_solicitar"
             SemanticProperties.Description="Pestaña Solicitar"
             ContentTemplate="{DataTemplate views:SolicitarPage}" />
         <ShellContent
             Title="Historial"
-            Icon="tab_historial_unsel"
+            Icon="tab_historial"
             Route="historial"
             AutomationId="tab_historial"
             SemanticProperties.Description="Pestaña Historial"

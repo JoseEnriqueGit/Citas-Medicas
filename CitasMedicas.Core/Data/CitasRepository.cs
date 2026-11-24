@@ -8,6 +8,11 @@ public sealed class CitasRepository : IDisposable
     private readonly SQLiteConnection _db;
     private readonly object _gate = new();
 
+    static CitasRepository()
+    {
+        SQLitePCL.Batteries_V2.Init();
+    }
+
     public CitasRepository(string path)
     {
         _db = new SQLiteConnection(path);
