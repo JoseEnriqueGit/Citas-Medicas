@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CitasMedicas.App.Views.HorariosPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:CitasMedicas.App.Controls"
+    Title="Horarios"
+    BackgroundColor="{StaticResource Background}"
+    Shell.NavBarIsVisible="False">
+    <Grid RowDefinitions="Auto,*">
+        <controls:AppBar
+            Title="Horarios"
+            PatientName="{Binding NombrePaciente}"
+            SemanticProperties.Description="Barra superior de Horarios" />
+        <Label
+            Grid.Row="1"
+            Text="Horarios"
+            Style="{StaticResource TitleLabel}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

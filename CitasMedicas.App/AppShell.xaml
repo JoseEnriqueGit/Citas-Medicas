@@ -3,12 +3,49 @@
     x:Class="CitasMedicas.App.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:CitasMedicas.App"
-    Title="CitasMedicas.App">
+    xmlns:views="clr-namespace:CitasMedicas.App.Views"
+    FlyoutBehavior="Disabled"
+    Shell.TabBarBackgroundColor="{StaticResource Surface}"
+    Shell.TabBarForegroundColor="{StaticResource PrimaryDark}"
+    Shell.TabBarTitleColor="{StaticResource Ink}"
+    Shell.TabBarUnselectedColor="{StaticResource Muted}">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        <ShellContent
+            Title="Paciente"
+            Icon="tab_paciente_unsel"
+            Route="paciente"
+            AutomationId="tab_paciente"
+            SemanticProperties.Description="Pestaña Paciente"
+            ContentTemplate="{DataTemplate views:RegistroPage}" />
+        <ShellContent
+            Title="Médicos"
+            Icon="tab_medicos_unsel"
+            Route="medicos"
+            AutomationId="tab_medicos"
+            SemanticProperties.Description="Pestaña Médicos"
+            ContentTemplate="{DataTemplate views:MedicosPage}" />
+        <ShellContent
+            Title="Horarios"
+            Icon="tab_horarios_unsel"
+            Route="horarios"
+            AutomationId="tab_horarios"
+            SemanticProperties.Description="Pestaña Horarios"
+            ContentTemplate="{DataTemplate views:HorariosPage}" />
+        <ShellContent
+            Title="Solicitar"
+            Icon="tab_solicitar_unsel"
+            Route="solicitar"
+            AutomationId="tab_solicitar"
+            SemanticProperties.Description="Pestaña Solicitar"
+            ContentTemplate="{DataTemplate views:SolicitarPage}" />
+        <ShellContent
+            Title="Historial"
+            Icon="tab_historial_unsel"
+            Route="historial"
+            AutomationId="tab_historial"
+            SemanticProperties.Description="Pestaña Historial"
+            ContentTemplate="{DataTemplate views:HistorialPage}" />
+    </TabBar>
 
 </Shell>

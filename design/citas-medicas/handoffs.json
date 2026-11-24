@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "chosen": "01-registro.html",
+  "handoffs": {
+    "01-registro.html": {
+      "status": "sent",
+      "queued": false,
+      "sentAt": "2026-11-24T20:04:22.038Z",
+      "startedAt": null,
+      "implementedAt": null,
+      "feature": "odd/tasks/citas-medicas.md"
+    }
+  }
+}

@@ -17,9 +17,9 @@ Estado: andamiaje y diseño de UI listos; falta toda la implementación. Diseño
 
 | ID | Specs | Ruta | Descripción | Commit |
 | --- | --- | --- | --- | --- |
-| T1 | S1 S2 S6 | inline, TDD | Core: modelos `Paciente`, `Medico`, `Cita`, repositorio SQLite (sqlite-net-pcl), seed de 9 médicos | |
-| T2 | S3 | inline, TDD | Core: `HorarioService` (bloques, días hábiles, ocupados, próximo libre) | |
-| T3 | S4 S6 | inline, TDD | Core: `CitaService` (solicitar, doble reserva, pasado, cancelar, historial) y `PacienteService` (validación, cédula única) | |
+| T1 | S1 S2 S6 | inline, TDD | Core: modelos `Paciente`, `Medico`, `Cita`, repositorio SQLite (sqlite-net-pcl), seed de 9 médicos | ada4bca |
+| T2 | S3 | inline, TDD | Core: `HorarioService` (bloques, días hábiles, ocupados, próximo libre) | 087ceb6 |
+| T3 | S4 S6 | inline, TDD | Core: `CitaService` (solicitar, doble reserva, pasado, cancelar, historial) y `PacienteService` (validación, cédula única) | 01c5ff5 |
 | T4 | S7 | inline | App: `Colors.xaml` y `Styles.xaml` desde `design/system.md`, Shell con 5 pestañas, inyección de dependencias, quitar la plantilla | |
 | T5 | S1 | inline | Pantalla Registro (3 estados) | |
 | T6 | S2 S3 | inline | Pantallas Médicos y Horarios (6 estados) | |

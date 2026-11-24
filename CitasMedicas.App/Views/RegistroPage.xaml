@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CitasMedicas.App.Views.RegistroPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:CitasMedicas.App.Controls"
+    Title="Registro de paciente"
+    BackgroundColor="{StaticResource Background}"
+    Shell.NavBarIsVisible="False">
+    <Grid RowDefinitions="Auto,*">
+        <controls:AppBar
+            Title="Registro de paciente"
+            PatientName="{Binding NombrePaciente}"
+            SemanticProperties.Description="Barra superior de Registro de paciente" />
+        <Label
+            Grid.Row="1"
+            Text="Registro de paciente"
+            Style="{StaticResource TitleLabel}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

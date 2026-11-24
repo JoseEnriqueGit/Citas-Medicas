@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="CitasMedicas.App.Controls.ChipView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="Root">
+    <Border
+        x:Name="ChipFrame"
+        MinimumHeightRequest="44"
+        BackgroundColor="{StaticResource Surface}"
+        Stroke="{StaticResource Border}"
+        StrokeThickness="1"
+        StrokeShape="RoundRectangle 22"
+        Padding="15,0">
+        <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+            <Image
+                x:Name="CheckIcon"
+                Source="ic_check_primary"
+                WidthRequest="18"
+                HeightRequest="18"
+                VerticalOptions="Center"
+                IsVisible="False"
+                AutomationProperties.IsInAccessibleTree="False" />
+            <Label
+                x:Name="TextLabel"
+                FontSize="14"
+                VerticalOptions="Center"
+                Text="{Binding Text, Source={x:Reference Root}}" />
+        </HorizontalStackLayout>
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnTapped" />
+        </Border.GestureRecognizers>
+    </Border>
+</ContentView>
