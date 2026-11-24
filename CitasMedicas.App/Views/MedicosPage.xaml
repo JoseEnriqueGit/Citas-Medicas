@@ -40,6 +40,26 @@
                 </Grid>
             </Border>
 
+            <Border Style="{StaticResource BannerSuccess}" IsVisible="{Binding AvisoVisible}" SemanticProperties.Description="{Binding TextoAviso}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Image
+                        Source="ic_check_success"
+                        WidthRequest="20"
+                        HeightRequest="20"
+                        VerticalOptions="Start"
+                        AutomationProperties.IsInAccessibleTree="False" />
+                    <Label Grid.Column="1" Style="{StaticResource BannerSuccessText}" Text="{Binding TextoAviso}" FontAttributes="Bold" />
+                </Grid>
+            </Border>
+
+            <Button
+                Style="{StaticResource SecondaryButton}"
+                Text="Agregar médico"
+                ImageSource="ic_plus_primary"
+                ContentLayout="Left,8"
+                Command="{Binding AgregarCommand}"
+                SemanticProperties.Description="Agregar médico" />
+
             <VerticalStackLayout Spacing="4">
                 <Label Style="{StaticResource FieldLabel}" Text="Buscar médico" />
                 <Border Style="{StaticResource FieldBorder}">

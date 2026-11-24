@@ -31,6 +31,7 @@ public sealed class SolicitarViewModel : ObservableObject
         _repositorio = repositorio;
         _estado = estado;
         _estado.PacienteActivoCambio += Reiniciar;
+        _estado.MedicosCambiaron += OnMedicosCambiaron;
         RevisarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(RevisarAsync));
         CambiarMedicoCommand = new Command(() =>
         {
@@ -167,10 +168,7 @@ public sealed class SolicitarViewModel : ObservableObject
     {
         if (Medicos.Count == 0)
         {
-            foreach (var medico in _repositorio.ListarMedicos())
-            {
-                Medicos.Add(new MedicoOpcion(medico, ElegirMedico));
-            }
+            ReconstruirMedicos();
         }
 
         if (_datosProgramada is not null && _estado.Horario is not null)
@@ -196,6 +194,29 @@ public sealed class SolicitarViewModel : ObservableObject
         ReconstruirFechas();
         RecargarBloques();
         NotificarTodo();
+    }
+
+    private void OnMedicosCambiaron()
+    {
+        ReconstruirMedicos();
+        NotificarTodo();
+    }
+
+    private void ReconstruirMedicos()
+    {
+        var medicos = _repositorio.ListarMedicos();
+        Medicos.Clear();
+        foreach (var medico in medicos)
+        {
+            Medicos.Add(new MedicoOpcion(medico, ElegirMedico));
+        }
+
+        if (_estado.Medico is { } actual && medicos.All(m => m.Id != actual.Id))
+        {
+            _estado.Medico = null;
+            _estado.Fecha = null;
+            _estado.Horario = null;
+        }
     }
 
     private void ReconstruirFechas()

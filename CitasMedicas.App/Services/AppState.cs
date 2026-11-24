@@ -13,12 +13,15 @@ public sealed class AppState : ObservableObject
     private DateTime? _fecha;
     private DateTime? _horario;
 
-    public AppState(CitasRepository repositorio, PacienteService pacientes)
+    public AppState(CitasRepository repositorio, PacienteService pacientes, MedicoService medicos)
     {
         _repositorio = repositorio;
         _paciente = repositorio.ObtenerPacienteActivo();
         pacientes.PacientesCambiaron += OnPacientesCambiaron;
+        medicos.MedicoRegistrado += OnMedicoRegistrado;
     }
+
+    public event Action? MedicosCambiaron;
 
     public event Action? PacienteActivoCambio;
 
@@ -67,6 +70,17 @@ public sealed class AppState : ObservableObject
         }
 
         MainThread.BeginInvokeOnMainThread(Procesar);
+    }
+
+    private void OnMedicoRegistrado(Medico medico)
+    {
+        if (MainThread.IsMainThread)
+        {
+            MedicosCambiaron?.Invoke();
+            return;
+        }
+
+        MainThread.BeginInvokeOnMainThread(() => MedicosCambiaron?.Invoke());
     }
 
     private void Procesar()

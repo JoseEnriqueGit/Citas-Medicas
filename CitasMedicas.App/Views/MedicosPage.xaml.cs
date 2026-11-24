@@ -10,6 +10,8 @@ public partial class MedicosPage : ContentPage
     {
         InitializeComponent();
         BindingContext = _vm = vm;
+        _vm.RegistrarAsync = formulario => RegistroMedicoPage.MostrarAsync(Navigation, formulario);
+        _vm.AvisoMostrado += SemanticScreenReader.Announce;
     }
 
     protected override void OnAppearing()

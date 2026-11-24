@@ -3,26 +3,36 @@ using System.Text;
 using System.Windows.Input;
 using CitasMedicas.App.Services;
 using CitasMedicas.Core.Data;
+using CitasMedicas.Core.Models;
 using CitasMedicas.Core.Services;
 
 namespace CitasMedicas.App.ViewModels;
 
 public sealed class MedicosViewModel : ObservableObject
 {
+    private const int MilisegundosAviso = 3000;
+
     private readonly CitasRepository _repositorio;
     private readonly HorarioService _horarios;
+    private readonly MedicoService _medicosServicio;
     private readonly AppState _estado;
+    private bool _abriendo;
+    private bool _avisoVisible;
+    private string _textoAviso = "";
+    private int _versionAviso;
     private List<MedicoItem> _todos = new();
     private IReadOnlyList<MedicoItem> _medicos = Array.Empty<MedicoItem>();
     private IReadOnlyList<EspecialidadItem> _especialidades = Array.Empty<EspecialidadItem>();
     private string _busqueda = "";
     private string? _especialidad;
 
-    public MedicosViewModel(CitasRepository repositorio, HorarioService horarios, AppState estado)
+    public MedicosViewModel(CitasRepository repositorio, HorarioService horarios, MedicoService medicosServicio, AppState estado)
     {
         _repositorio = repositorio;
         _horarios = horarios;
+        _medicosServicio = medicosServicio;
         _estado = estado;
+        _estado.MedicosCambiaron += Cargar;
         _estado.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(AppState.Paciente))
@@ -32,6 +42,25 @@ public sealed class MedicosViewModel : ObservableObject
         };
         LimpiarCommand = new Command(Limpiar);
         RegistrarseCommand = new Command(async () => await Shell.Current.GoToAsync("//paciente"));
+        AgregarCommand = new Command(() => _ = ErroresUi.EjecutarAsync(AgregarAsync));
+    }
+
+    public event Action<string>? AvisoMostrado;
+
+    public Func<RegistroMedicoViewModel, Task<Medico?>>? RegistrarAsync { get; set; }
+
+    public ICommand AgregarCommand { get; }
+
+    public bool AvisoVisible
+    {
+        get => _avisoVisible;
+        private set => SetProperty(ref _avisoVisible, value);
+    }
+
+    public string TextoAviso
+    {
+        get => _textoAviso;
+        private set => SetProperty(ref _textoAviso, value);
     }
 
     public AppState Estado => _estado;
@@ -127,6 +156,43 @@ public sealed class MedicosViewModel : ObservableObject
         chips.AddRange(nombres.Select(n => new EspecialidadItem(n, n, ElegirEspecialidad)));
         Especialidades = chips;
         Filtrar();
+    }
+
+    private async Task AgregarAsync()
+    {
+        if (_abriendo || RegistrarAsync is null)
+        {
+            return;
+        }
+
+        _abriendo = true;
+        Medico? medico;
+        try
+        {
+            medico = await RegistrarAsync(new RegistroMedicoViewModel(_medicosServicio));
+        }
+        finally
+        {
+            _abriendo = false;
+        }
+
+        if (medico is not null)
+        {
+            await MostrarAvisoAsync(medico.Nombre);
+        }
+    }
+
+    private async Task MostrarAvisoAsync(string nombre)
+    {
+        var version = ++_versionAviso;
+        TextoAviso = $"Médico registrado: {nombre}.";
+        AvisoVisible = true;
+        AvisoMostrado?.Invoke(TextoAviso);
+        await Task.Delay(MilisegundosAviso);
+        if (version == _versionAviso)
+        {
+            AvisoVisible = false;
+        }
     }
 
     private void Elegir(MedicoItem item)
