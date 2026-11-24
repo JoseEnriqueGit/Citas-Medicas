@@ -1,0 +1,29 @@
+{
+  "arrangement": "grid",
+  "positions": {
+    "system": {
+      "x": 0,
+      "y": 0
+    },
+    "01-registro.html": {
+      "x": 1520,
+      "y": 0
+    },
+    "02-medicos.html": {
+      "x": 3320,
+      "y": 0
+    },
+    "03-horarios.html": {
+      "x": 0,
+      "y": 1351
+    },
+    "04-solicitar-cita.html": {
+      "x": 1520,
+      "y": 1351
+    },
+    "05-historial.html": {
+      "x": 3320,
+      "y": 1351
+    }
+  }
+}

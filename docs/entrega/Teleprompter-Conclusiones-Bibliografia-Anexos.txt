@@ -1,7 +1,4 @@
-Para cerrar el trabajo, presento las conclusiones, la bibliografía y los
-anexos.
-
-Empiezo por las conclusiones.
+Bien como vieron
 
 Construimos una aplicación móvil para Android, con .NET MAUI y el lenguaje
 C#.
@@ -9,12 +6,10 @@ C#.
 Con ella, un paciente puede registrarse, consultar médicos, ver los horarios
 disponibles, solicitar una cita y revisar su historial.
 
-Es una aplicación funcional. Tiene ciento diecinueve pruebas automáticas y
-la verificamos también en un emulador de Android.
 
 Teníamos seis objetivos específicos.
 
-Tres se cumplieron por completo: el registro del paciente, la reserva de
+3 se cumplieron por completo: el registro del paciente, la reserva de
 citas con verificación de disponibilidad, y el historial de citas.
 
 Los otros tres se cumplieron de forma parcial: en los médicos, filtramos por
@@ -43,7 +38,6 @@ Quinto: la aplicación se recupera de fallos. Si el archivo de datos se
 daña, no se cierra: permite reintentar o empezar de cero, y guarda una copia
 del archivo afectado.
 
-Hay que ser honestos con el alcance.
 
 Los datos se guardan en el teléfono. No hay servidor.
 
@@ -53,23 +47,6 @@ ni el cifrado de contraseñas que pedían nuestros requisitos.
 No hay reprogramación. Si alguien quiere cambiar una cita, la cancela y pide
 otra.
 
-Todos los médicos tienen el mismo horario, y los nueve médicos son datos de
-ejemplo.
-
-Y probamos en un emulador, no en teléfonos físicos.
-
-Como trabajo futuro:
-
-Primero, un servidor con autenticación y comunicación protegida.
-
-Segundo, revisar el manejo de datos personales según la Ley 172-13 de
-República Dominicana.
-
-Tercero, agregar la reprogramación y marcar las citas como completadas.
-
-Cuarto, horarios por centro médico y filtros por centro y disponibilidad.
-
-Y quinto, recordatorios, y pruebas en teléfonos reales.
 
 En conclusión, el proyecto cumplió su propósito principal: ordenar la
 solicitud de citas médicas, evitar que un mismo horario se reserve dos
@@ -77,14 +54,6 @@ veces, y dejar un historial que se puede consultar.
 
 Las limitaciones no invalidan el resultado. Marcan el alcance de esta primera
 versión y la ruta para mejorarla.
-
-Sigo con la bibliografía.
-
-Las referencias siguen el formato APA, séptima edición.
-
-Usamos doce fuentes, de cuatro tipos.
-
-Libros de ingeniería de software: Beck, Pressman y Maxim, y Sommerville.
 
 Normas y leyes: la norma ISO 25010 de calidad de software, las pautas de
 accesibilidad WCAG 2.2, y la Ley 172-13 de protección de datos personales.
