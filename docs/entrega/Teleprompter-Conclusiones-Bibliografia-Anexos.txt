@@ -1,30 +1,9 @@
-TELEPROMPTER
-CONCLUSIONES, BIBLIOGRAFÍA Y ANEXOS
-Sistema de Gestión de Citas Médicas
-
-Duración estimada: de 5 a 6 minutos, a ritmo tranquilo (unas 730 palabras).
-Cómo leerlo: cada línea es una frase corta. Lee una, respira, sigue.
-  [PAUSA]    = respira un segundo.
-  [MOSTRAR]  = cambia lo que muestras en pantalla.
-  [GESTO]    = apunta o señala lo que mencionas.
-
-
-════════════════════════════════════════
-1. CONCLUSIONES
-(2 minutos y medio)
-════════════════════════════════════════
-
 Para cerrar el trabajo,
 presento las conclusiones,
 la bibliografía
 y los anexos.
 
-[PAUSA]
-
 Empiezo por las conclusiones.
-
-
-EL RESULTADO
 
 Construimos una aplicación móvil para Android,
 con .NET MAUI y el lenguaje C#.
@@ -35,16 +14,9 @@ ver los horarios disponibles,
 solicitar una cita
 y revisar su historial.
 
-[MOSTRAR: la aplicación abierta en el emulador]
-
 Es una aplicación funcional.
 Tiene ciento diecinueve pruebas automáticas
 y la verificamos también en un emulador de Android.
-
-[PAUSA]
-
-
-LOS OBJETIVOS
 
 Teníamos seis objetivos específicos.
 
@@ -60,11 +32,6 @@ En los horarios, se puede cancelar una cita,
 pero todavía no reprogramarla.
 Y en seguridad, pedimos solo los datos necesarios,
 pero no hay autenticación ni cifrado.
-
-[PAUSA]
-
-
-LO MÁS IMPORTANTE QUE APRENDIMOS
 
 Primero: evitamos las dobles reservas.
 La regla no solo está en el código.
@@ -98,11 +65,6 @@ no se cierra:
 permite reintentar o empezar de cero,
 y guarda una copia del archivo afectado.
 
-[PAUSA]
-
-
-LAS LIMITACIONES
-
 Hay que ser honestos con el alcance.
 
 Los datos se guardan en el teléfono.
@@ -123,10 +85,7 @@ y los nueve médicos son datos de ejemplo.
 Y probamos en un emulador,
 no en teléfonos físicos.
 
-[PAUSA]
-
-
-LO QUE SIGUE
+Como trabajo futuro:
 
 Primero, un servidor con autenticación
 y comunicación protegida.
@@ -143,10 +102,7 @@ y filtros por centro y disponibilidad.
 Y quinto, recordatorios,
 y pruebas en teléfonos reales.
 
-
-CONCLUSIÓN FINAL
-
-El proyecto cumplió su propósito principal:
+En conclusión, el proyecto cumplió su propósito principal:
 ordenar la solicitud de citas médicas,
 evitar que un mismo horario se reserve dos veces,
 y dejar un historial que se puede consultar.
@@ -155,15 +111,7 @@ Las limitaciones no invalidan el resultado.
 Marcan el alcance de esta primera versión
 y la ruta para mejorarla.
 
-[PAUSA LARGA]
-
-
-════════════════════════════════════════
-2. BIBLIOGRAFÍA
-(45 segundos)
-════════════════════════════════════════
-
-[MOSTRAR: la página de Bibliografía]
+Sigo con la bibliografía.
 
 Las referencias siguen el formato APA,
 séptima edición.
@@ -186,15 +134,7 @@ SQLite, sqlite-net y xUnit.
 Y en usabilidad:
 los diez principios de Jakob Nielsen.
 
-[PAUSA]
-
-
-════════════════════════════════════════
-3. ANEXOS
-(1 minuto y medio)
-════════════════════════════════════════
-
-[MOSTRAR: la página de Anexos]
+Termino con los anexos.
 
 Los anexos reúnen la evidencia técnica del proyecto.
 Son ocho.
@@ -224,13 +164,9 @@ Por ejemplo, la cédula única,
 los bloques de treinta minutos,
 y que solo se cancelan citas programadas.
 
-[MOSTRAR: Anexo F, las capturas]
-
 Anexo F.
 Dieciocho capturas de pantalla
 de todas las pantallas y estados.
-
-[GESTO: señala una captura, por ejemplo la de horario ya tomado]
 
 Aquí se ve cuando otro ocupa el horario:
 la aplicación avisa,
@@ -246,55 +182,6 @@ más seis escenarios verificados en el emulador.
 Anexo H.
 La guía para ejecutar la aplicación.
 
-[PAUSA]
-
-
-CIERRE
-
 Con esto concluyo mi parte.
 Muchas gracias.
 Quedo atento a sus preguntas.
-
-
-════════════════════════════════════════
-SI TE PREGUNTAN (respuestas cortas)
-════════════════════════════════════════
-
-P: ¿Por qué no tiene inicio de sesión, si el requisito lo pide?
-R: Fue una decisión de alcance.
-   La primera versión guarda todo en un solo teléfono.
-   No hay servidor, entonces no hay a quién autenticar.
-   Está marcado como trabajo futuro
-   y aparece como "no implementado" en el Anexo A.
-
-P: ¿Qué pasa si dos pacientes piden el mismo horario?
-R: Al confirmar, la aplicación vuelve a comprobar.
-   Y la base de datos tiene un índice único,
-   así que solo se guarda una cita.
-   Ojo: hoy cada teléfono tiene su propia base.
-   El conflicto entre pacientes distintos
-   aparecerá cuando haya un servidor compartido.
-   La regla ya está lista en el núcleo.
-
-P: ¿Por qué SQLite y no un servidor?
-R: Es simple, funciona sin internet
-   y alcanza para la primera versión.
-   Además, las reglas están separadas de la interfaz,
-   así que migrar a un servidor es más fácil.
-
-P: ¿Cómo comprobaron que funciona?
-R: Con ciento diecinueve pruebas automáticas
-   y con seis escenarios en el emulador:
-   el flujo completo, el botón Atrás,
-   el doble toque, la cancelación,
-   el horario ya tomado
-   y el archivo de datos dañado.
-
-P: ¿Qué falta por hacer?
-R: Reprogramar citas,
-   marcarlas como completadas,
-   y el servidor con autenticación.
-
-P: ¿Se probó en un teléfono real?
-R: No. Solo en un emulador de Android.
-   Está declarado como limitación.
